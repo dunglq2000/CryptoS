@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FiniteField.Tests/FiniteField.Tests.csproj" />
+  <Project Path="FiniteField/FiniteField.csproj" />
+  <Project Path="Polynomial.Tests/Polynomial.Tests.csproj" />
+  <Project Path="Polynomial/Polynomial.csproj" />
+</Solution>
