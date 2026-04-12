@@ -26,12 +26,71 @@ public class Monomial
     {
         if (left.nbits != right.nbits)
         {
-            throw new Exception("The number of bits of monomial must the the same!.");
+            throw new ArgumentException("The number of bits of monomials must the the same!");
         }
         uint[] result = new uint[left.nbits / 32];
         for (int i = 0; i < result.Length; ++i)
             result[i] = left.bits[i] | right.bits[i];
         return new Monomial(left.nbits, result);
+    }
+    public static Monomial operator/(Monomial left, Monomial right)
+    {
+        if (left.IsDivisible(right) == false)
+        {
+            throw new ArgumentException("First monomial is not divisible by the second!");
+        }
+        if (left.nbits != right.nbits)
+        {
+            throw new Exception("The number of bits of monomials must be the same!");
+        }
+        uint[] result = new uint[left.nbits / 32];
+        for (var i = 0; i < result.Length; ++i)
+        {
+            result[i] = left.bits[i] ^ right.bits[i];
+        }
+        return new Monomial(left.nbits, result);
+    }
+    public void Multiply(Monomial other)
+    {
+        if (nbits != other.nbits)
+        {
+            throw new ArgumentException("The number of bits of monomials must be the same!");
+        }
+        for (var i = 0; i < bits.Length; ++i)
+        {
+            bits[i] |= other.bits[i];
+        }
+    }
+    public void Divide(Monomial other)
+    {
+        if (nbits != other.nbits)
+        {
+            throw new ArgumentException("The number of bits of monomials must be the same!");
+        }
+        if (IsDivisible(other) == false)
+        {
+            throw new ArgumentException("First monomial is not divisible by the second!");
+        }
+        for (var i = 0; i < bits.Length; ++i)
+        {
+            bits[i] ^= other.bits[i];
+        }
+    }
+    public bool IsDivisible(Monomial other)
+    {
+        if (nbits != other.nbits)
+        {
+            throw new ArgumentException("The number of bits of monomials must be the same!");
+        }
+        for (var i = 0; i < bits.Length; ++i)
+        {
+            uint tmp = bits[i] | (~other.bits[i]);
+            if (tmp != 0xffffffff)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     public override bool Equals(object? obj)
     {
