@@ -1,4 +1,4 @@
-namespace FiniteFieldService
+namespace FiniteFields
 {
     public class Fraction
     {

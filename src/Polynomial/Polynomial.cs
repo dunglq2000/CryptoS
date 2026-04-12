@@ -1,4 +1,4 @@
-namespace PolynomialService;
+namespace Polynomials;
 
 public class Polynomial
 {

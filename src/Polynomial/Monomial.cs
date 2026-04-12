@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace PolynomialService;
+namespace Polynomials;
 public class Monomial
 {
     public readonly uint nbits;

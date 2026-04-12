@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FiniteField\FiniteField.csproj" />
+    <ProjectReference Include="..\..\src\Polynomial\Polynomial.csproj" />
   </ItemGroup>
 
 </Project>

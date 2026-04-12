@@ -1,4 +1,4 @@
-using PolynomialService;
+using Polynomials;
 namespace Polynomial.Tests;
 
 [TestClass]

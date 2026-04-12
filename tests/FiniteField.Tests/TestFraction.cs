@@ -1,4 +1,4 @@
-﻿using FiniteFieldService;
+﻿using FiniteFields;
 
 namespace FiniteField.Tests;
 
