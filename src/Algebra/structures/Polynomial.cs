@@ -14,7 +14,11 @@ public class Polynomial
     public Polynomial(MonomialOrdering monomialOrdering, List<Monomial> monomials)
     {
         this.monomialOrdering = monomialOrdering;
-        this.monomials = monomials.Distinct().OrderBy(monomial => monomial, monomialOrdering).ToList();
+        this.monomials = new List<Monomial>();
+        foreach(var monomial in monomials)
+        {
+            Add(monomial);
+        }
     }
     public bool IsZero()
     {
@@ -36,6 +40,12 @@ public class Polynomial
         }
         return new Polynomial(monomialOrdering, monomials);
     }
+    public static Polynomial operator*(Polynomial polynomial, Monomial monomial)
+    {
+        MonomialOrdering monomialOrdering = polynomial.monomialOrdering;
+        List<Monomial> monomials = polynomial.monomials.Select(mono => mono * monomial).ToList();
+        return new Polynomial(monomialOrdering, monomials);
+    }
     public void Add(Monomial monomial)
     {
         var index = monomials.BinarySearch(monomial, monomialOrdering);
@@ -47,6 +57,15 @@ public class Polynomial
         else
         {
             monomials.Remove(monomial);
+        }
+    }
+    public void Multiply(Monomial monomial)
+    {
+        List<Monomial> newMonmials = monomials.Select(mono => mono * monomial).ToList();
+        monomials.Clear();
+        foreach (var mono in newMonmials)
+        {
+            Add(mono);
         }
     }
     public bool Equals(Polynomial other)
