@@ -101,4 +101,51 @@ public class TestPolynomial
         p.Multiply(c);
         Assert.AreEqual(p, new Polynomial(new LexOrdering(), [c, d]));
     }
+    [TestMethod]
+    public void TestSPoly1()
+    {
+        Monomial a = new Monomial(32, [3758096384U]);   // 1, 1, 1, 0
+        Monomial b = new Monomial(32, [ 268435456U]);   // 0, 0, 0, 1
+        Monomial c = new Monomial(32, [1342177280U]);   // 0, 1, 0, 1
+        Monomial d = new Monomial(32, [ 536870912U]);   // 0, 0, 1, 0
+        Monomial e = new Monomial(32, [2684354560U]);   // 1, 0, 1, 0
+        Polynomial p = new Polynomial(new LexOrdering(), [a, c, b]);
+        Polynomial q = new Polynomial(new LexOrdering(), [c, d]);
+        Polynomial result = new Polynomial(new LexOrdering(), [e, c, b]);
+        Assert.AreEqual(Polynomial.SPoly(p, q), result);
+    }
+    [TestMethod]
+    public void TestSPoly2()
+    {
+        Monomial a = new Monomial(32, [3758096384U]);   // 1, 1, 1, 0
+        Monomial b = new Monomial(32, [ 268435456U]);   // 0, 0, 0, 1
+        Monomial c = new Monomial(32, [1342177280U]);   // 0, 1, 0, 1
+        Monomial d = new Monomial(32, [ 536870912U]);   // 0, 0, 1, 0
+        Monomial e = new Monomial(32, [2684354560U]);   // 1, 0, 1, 0
+        Polynomial p = new Polynomial(new LexOrdering(), [a, c, b]);
+        Polynomial q = new Polynomial(new LexOrdering(), [c, d]);
+        Polynomial result = new Polynomial(new LexOrdering(), [e, c, b]);
+        Assert.AreEqual(p.SPoly(q), result);
+    }
+    [TestMethod]
+    public void TestPolynomialDivision()
+    {
+        Monomial a = new Monomial(32, [3758096384U]);   // 1, 1, 1, 0
+        Monomial b = new Monomial(32, [1073741824U]);   // 0, 1, 0, 0
+        Monomial c = new Monomial(32, [         0U]);   // 0, 0, 0, 0
+        // p = xyz + y + 1
+        Polynomial p = new Polynomial(new LexOrdering(), [a, b, c]);
+
+        Monomial d = new Monomial(32, [3221225472U]);   // 1, 1, 0, 0
+        Monomial e = new Monomial(32, [1342177280U]);   // 0, 1, 0, 1
+        Monomial f = new Monomial(32, [ 268435456U]);   // 0, 0, 0, 1
+        Monomial g = new Monomial(32, [ 536870912U]);   // 0, 0, 1, 0
+        Monomial h = new Monomial(32, [ 805306368U]);   // 0, 0, 1, 1
+        List<Polynomial> polynomials = [
+            new Polynomial(new LexOrdering(), [d, e, f]),
+            new Polynomial(new LexOrdering(), [e, g])
+        ];
+        var (r, q) = p.Divide(polynomials);
+        Assert.AreEqual(new Polynomial(new LexOrdering(), [b, h, g, c]), r);
+    }
 }

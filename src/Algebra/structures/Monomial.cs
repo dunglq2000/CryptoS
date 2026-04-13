@@ -35,7 +35,7 @@ public class Monomial
     }
     public static Monomial operator/(Monomial left, Monomial right)
     {
-        if (left.IsDivisible(right) == false)
+        if (left.IsDivisibleBy(right) == false)
         {
             throw new ArgumentException("First monomial is not divisible by the second!");
         }
@@ -67,7 +67,7 @@ public class Monomial
         {
             throw new ArgumentException("The number of bits of monomials must be the same!");
         }
-        if (IsDivisible(other) == false)
+        if (IsDivisibleBy(other) == false)
         {
             throw new ArgumentException("First monomial is not divisible by the second!");
         }
@@ -76,7 +76,7 @@ public class Monomial
             bits[i] ^= other.bits[i];
         }
     }
-    public bool IsDivisible(Monomial other)
+    public bool IsDivisibleBy(Monomial other)
     {
         if (nbits != other.nbits)
         {

@@ -24,7 +24,7 @@ public class TestMonomial
     {
         Monomial a = new Monomial(32, [2952790016U]);   // 1, 0, 1, 1
         Monomial b = new Monomial(32, [ 268435456U]);   // 0, 0, 0, 1
-        var result = a.IsDivisible(b);
+        var result = a.IsDivisibleBy(b);
         Assert.IsTrue(result);
     }
     [TestMethod]
@@ -32,7 +32,7 @@ public class TestMonomial
     {
         Monomial a = new Monomial(32, [2952790016U]);   // 1, 0, 1, 1
         Monomial b = new Monomial(32, [1342177280U]);   // 0, 1, 0, 1
-        var result = a.IsDivisible(b);
+        var result = a.IsDivisibleBy(b);
         Assert.IsFalse(result);
     }
     [TestMethod]
