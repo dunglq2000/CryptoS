@@ -1,4 +1,4 @@
-namespace FiniteFields
+namespace Algebra
 {
     public class FiniteField
     {

@@ -1,6 +1,4 @@
-﻿using FiniteFields;
-
-namespace FiniteField.Tests;
+﻿namespace Algebra.Tests;
 
 [TestClass]
 public class TestFraction

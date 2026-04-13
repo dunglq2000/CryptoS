@@ -10,14 +10,19 @@ Cấu trúc thư mục:
 
 - `src/`:
 
-  - `FiniteField`: định nghĩa trường hữu hạn (`FiniteField`), phân số (`Fraction`)
-  - `Polynomial`: định nghĩa đơn thức (`Monomial`), thứ tự đơn thức (`MonomialOrdering`), đa thức (`Polynomial`):
-
-    - `Monomial`: tổ chức số mũ cho dưới dạng bit-packed vì số mũ của mỗi biến trong đơn thức chỉ là 0 hoặc 1 trên $\mathbb{B}[x_1, x_2, \ldots, x_n]$
-    - `MonomialOrdering`: hỗ trợ thứ tự từ điển `LexOrdering` và thứ tự bậc-từ điển `DeglexOrdering` được kế thừa từ `MonomialOrdering`
-    - `Polynomial`: chỉ định một dạng thứ tự đơn thức và chứa danh sách các đơn thức được sắp xếp giảm dần theo thứ tự đơn thức
+  - `Algebra`: 
+  
+    - `FiniteField.cs`: định nghĩa trường hữu hạn (chưa làm)
+    - `Fraction.cs`: định nghĩa phân số
+    - `Monomial.cs`: tổ chức số mũ cho dưới dạng bit-packed vì số mũ của mỗi biến trong đơn thức chỉ là 0 hoặc 1 trên $\mathbb{B}[x_1, x_2, \ldots, x_n]$
+    - `MonomialOrdering.cs`: hỗ trợ thứ tự từ điển `LexOrdering` và thứ tự bậc-từ điển `DeglexOrdering` được kế thừa từ interface `MonomialOrdering`
+    - `Polynomial.cs`: chỉ định một dạng thứ tự đơn thức và chứa danh sách các đơn thức được sắp xếp tăng dần theo thứ tự đơn thức
 
 - `tests/`:
 
-  - `FiniteField.Tests`: unit test cho lớp `Fraction`
-  - `Polynomial.Tests`: unit test cho `Monomial` và `MonomialOrdering`
+  - `Algebra.Tests`: 
+  
+    - `TestFraction.cs`: unit test cho lớp `Fraction`
+    - `TestMonomial.cs`: unit test cho lớp `Monomial`
+    - `TestMonomialOrdering.cs`: unit test cho các lớp con của interface `MonomialOrdering`
+    - `TestPolynomial.cs`: unit test cho lớp `Polynomial`

@@ -1,5 +1,4 @@
-using Polynomials;
-namespace Polynomial.Tests;
+namespace Algebra.Tests;
 
 [TestClass]
 public class TestMonomialOrdering

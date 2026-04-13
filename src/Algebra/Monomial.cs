@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Polynomials;
+namespace Algebra;
 public class Monomial
 {
     public readonly uint nbits;
@@ -86,6 +86,21 @@ public class Monomial
         {
             uint tmp = bits[i] | (~other.bits[i]);
             if (tmp != 0xffffffff)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public bool Equals(Monomial other)
+    {
+        if (nbits != other.nbits)
+        {
+            return false;
+        }
+        for (var i = 0; i < bits.Length; ++i)
+        {
+            if (bits[i] != other.bits[i])
             {
                 return false;
             }
