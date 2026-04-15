@@ -16,7 +16,7 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
         }
         while (pairs.Count > 0)
         {
-            var selectedPairs = Select(pairs);
+            var selectedPairs = Select(pairs, results);
             pairs = pairs.Except(selectedPairs).ToList();
             foreach (var pair in selectedPairs)
             {
@@ -36,7 +36,7 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
         }
         return results;
     }
-    public List<Tuple<int, int>> Select(List<Tuple<int, int>> pairs)
+    public override List<Tuple<int, int>> Select(List<Tuple<int, int>> pairs, List<Polynomial> polynomials)
     {
         return [pairs[0]];
     }

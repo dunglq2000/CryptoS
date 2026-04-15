@@ -4,6 +4,19 @@
 public class TestMonomial
 {
     [TestMethod]
+    public void TestMonomial1()
+    {
+        Monomial f = new Monomial(32, [0b_1110_1011_1000_1111U]);
+        var degree = f.Degree;
+        Assert.AreEqual(11, degree);
+    }
+    public void TestMonomial2()
+    {
+        Monomial f = new Monomial(5, [0b11010U << 27]);
+        var degree = f.Degree;
+        Assert.AreEqual(3, degree);
+    }
+    [TestMethod]
     public void TestMonomialMultiplication1()
     {
         Monomial a = new Monomial(32, [2952790016U]);   // 1, 0, 1, 1

@@ -83,3 +83,131 @@ Vì $x \neq 0$ nên $\boxed{f_4 = x}$. Kết thúc vòng lặp 5:
 $$F = \{ f_0, f_1, f_2, f_3, f_4 \}, P = \{ (2, 3), (0, 4), (1, 4), (2, 4), (3, 4) \}.$$
 
 Các phép chia $S$-poly sau đó luôn trả về $0$. Như vậy thuật toán Buchberger trả về cơ sở gồm $5$ đa thức.
+
+## F4 algorithm
+
+### Test 1
+
+Đầu vào: $\boxed{g_0 = xy + y}$, $\boxed{g_1 = y + 1}$.
+
+Ban đầu:
+
+$$G = \{ g_0, g_1 \}, P = \{ (0, 1) \}.$$
+
+Vòng lặp 1:
+
+$$P' = \{ (0, 1) \}, P = P \setminus P' = \emptyset, G = \{ xy + y, y + 1 \}.$$
+
+$G' = reduction(P', G)$:
+
+- $L = symbolic(P', G)$:
+
+  - đặt $L = \emptyset$
+  - for $(i, j)$ in $P'$:
+
+    - $(i, j) = (0, 1)$:
+
+      - $lcm = lcm(g_0, g_1) = xy$
+      - $l = \frac{xy}{xy} \cdot (xy + y) = xy + y$, $r = \frac{xy}{y} \cdot (y + 1) = xy + x$
+      - $L = L \cup \{ l, r \} = \{ xy + y, xy + x \}$
+
+  - $done = \{ xy \}$
+  
+  1. $Mon(L) = \{ xy, x, y \} \neq done = \{ xy \}$:
+
+     - $Mon(L) \setminus done = \{ x, y \}$
+     - $m = LM(Mon(L) \setminus done) = x$
+     - $done = done \cup \{ m \} = \{ xy, x \}$
+     - $LM(g_0) \nmid m$, $LM(g_1) \nmid m$ => đi tới vòng lặp kế
+
+  2. $Mon(L) = \{ xy, x, y \} \neq done = \{ xy, x \}$
+     
+     - $Mon(L) \setminus done = \{ y \}$
+     - $m = LM(Mon(L) \setminus done) = y$
+     - $done = done \cup \{ m \} = \{ xy, x, y \}$
+     - $LM(g_0) \nmid m$, $LM(g_1) \mid m$ => $\frac{m}{LM(g_1)} \cdot g_1 = \frac{y}{y} \cdot (y + 1) = y + 1$ => $L = L \cup \{  y + 1 \} = \{ xy + y, xy + x, y + 1 \}$
+
+  3. $Mon(L) = \{ xy, x, y, 1 \} \neq done = \{ xy, x, y \}$
+
+     - $Mon(L) \setminus done = \{ 1 \}$
+     - $m = LM(Mon(L) \setminus done) = 1$
+     - $done = done \cup \{ 1 \} = \{ xy, x, y, 1 \}$
+     - $LM(g_0) \nmid m$, $LM(g_1) \nmid m$ => đi tới vòng lặp kế
+
+  4. $Mon(L) = \{ xy, x, y, 1 \} = done$ => kết thúc vòng lặp
+
+  Trả về $L = \{ xy + y, xy + x, y + 1 \}$
+
+- ma trận tương ứng với $L = \{ xy + y, xy + x, y + 1 \}$ là
+
+$$\left(\begin{array}{cccc} xy & x & y & 1 \\ \hline 1 & 1 & 0 & 0 \\ 1 & 0 & 1 & 0 \\ 0 & 0 & 1 & 1 \end{array}\right) \sim \left(\begin{array}{cccc} xy & x & y & 1 \\ \hline 1 & 0 & 0 & 1 \\ 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 1 \end{array}\right)$$
+
+- $L' = \{ xy + 1, x + 1, y + 1 \}$
+- Trả về $G' = \{ x + 1 \}$
+
+Đặt $\boxed{g_2 = x + 1}$. Cập nhật
+
+$$G = G \cup G' = \{ xy + y, y + 1, x + 1 \} = \{ g_0, g_1, g_2 \}, P = \{ (0, 2), (1, 2) \}.$$
+
+Vòng lặp 2:
+
+$$P' = \{ (0, 2), (1, 2) \}, P = P \setminus P' = \emptyset, G = \{ g_0, g_1, g_2 \} = \{ xy + y, y + 1, x + 1 \}$$
+
+$G' = reduction(P', G)$:
+
+- $L = symbolic(P', G)$:
+
+  - đặt $L = \emptyset$
+  - for $(i, j)$ in $P'$:
+
+    - $(i, j) = (0, 2)$:
+
+      - $lcm = lcm(g_0, g_2) = xy$
+      - $l = \frac{xy}{xy} \cdot (xy + y) = xy + y$, $r = \frac{xy}{x} \cdot (x + 1) = xy + y$
+      - $L = L \cup \{ l, r \} = \{ xy + y \}$
+    
+    - $(i, j) = (1, 2)$:
+
+      - $lcm = lcm(g_1, g_2) = xy$
+      - $l = \frac{xy}{y} \cdot (y + 1) = xy + x$, $r = \frac{xy}{x} \cdot (x + 1) = xy + y$
+      - $L = L \cup \{ l, r \} = \{ xy + y, xy + x \}$
+
+  - $done = \{ xy \}$
+
+  1. $Mon(L) = \{ xy, x, y \} \neq done = \{ xy \}$
+
+     - $Mon(L) \setminus done = \{ x, y \}$
+     - $m = LM(Mon(L) \setminus done) = x$
+     - $done = done \cup \{ m \} = \{ xy, x \}$
+     - $LM(g_2) \mid m$ => $\frac{x}{LM(g_2)} \cdot g_2 = x + 1$ => $L = L \cup \{ x + 1 \} = \{ xy + y, xy + x, x + 1 \}$
+
+  2. $Mon(L) = \{ xy, x, y, 1 \} \neq done = \{ xy, x \}$
+
+     - $Mon(L) \setminus done = \{ y, 1 \}$
+     - $m = LM(Mon(L) \setminus done) = y$
+     - $done = done \cup \{ m \} = \{ xy, x, y \}$
+     - $LM(g_1) \mid m$ => $\frac{y}{LM(g_1)} \cdot g_1 = y + 1$ => $L = L \cup \{ y + 1 \} = \{ xy + y, xy + x, x + 1, y + 1 \}$
+
+  3. $Mon(L) = \{ xy, x, y, 1 \} \neq done = \{ xy, x, y \}$
+     
+     - $Mon(L) \setminus done = \{ 1 \}$
+     - $m = LM(Mon(L) \setminus done) = 1$
+     - $done = done \cup \{ m \} = \{ xy, x, y, 1 \}$
+     - $LM(g_i) \nmid m$ với mọi $0 \leqslant i \leqslant 2$
+
+  4. $Mon(L) = \{ xy, x, y, 1 \} = done$, kết thúc vòng lặp
+
+  Trả về $L = \{ xy + y, xy + x, x + 1, y + 1\}$
+
+- ma trận tương ứng với $L = \{ xy + y, xy + x, x + 1, y + 1\}$ là
+
+$$\left(\begin{array}{cccc} xy & x & y & 1 \\ \hline 1 & 0 & 1 & 0 \\ 1 & 1 & 0 & 0 \\ 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 1 \end{array}\right) \sim \left(\begin{array}{cccc} xy & x & y & 1 \\ \hline 1 & 0 & 0 & 1 \\ 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 0 \end{array}\right)$$
+
+- $L' = \{ xy + 1, x + 1, y + 1 \}$
+- Trả về $G' = \emptyset$
+
+Như vậy kết quả cuối cùng là
+
+$$G = \{ xy + y, x + 1, y + 1 \}$$
+
+là cơ sở Grebner.

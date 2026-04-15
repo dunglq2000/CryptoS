@@ -8,15 +8,15 @@ public class LexOrdering : MonomialOrdering
         {
             throw new ArgumentException("Monomial cannot be null");
         }
-        if (left.nbits != right.nbits)
+        if (left.BitCount != right.BitCount)
         {
             throw new ArgumentException("Dimension of two monomials must be the same");
         }
-        for (var i = 0; i < left.bits.Length; ++i)
+        for (var i = 0; i < left.Bits.Length; ++i)
         {
-            if (left.bits[i] != right.bits[i])
+            if (left.Bits[i] != right.Bits[i])
             {
-                if (left.bits[i] > right.bits[i])
+                if (left.Bits[i] > right.Bits[i])
                 {
                     return 1;
                 }

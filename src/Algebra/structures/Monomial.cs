@@ -1,37 +1,53 @@
+using System.Numerics;
 using System.Text;
 
 namespace Algebra;
 public class Monomial
 {
-    public readonly uint nbits;
-    public uint[] bits;
-    public Monomial(uint nbits)
-    {
-        this.nbits = nbits;
-        bits = new uint[nbits / 32];
+    public readonly uint BitCount;
+    public uint[] Bits;
+    /// <summary>
+    /// <para>Use fast way to count the number of bits in <c>uint</c></para>
+    /// <para>Source: <see cref="https://stackoverflow.com/a/12175897"/></para>
+    /// </summary>
+    public int Degree {
+        get
+        {
+            int result = 0;
+            foreach (var chunk in Bits)
+            {
+                result += BitOperations.PopCount(chunk);
+            }
+            return result;
+        }
     }
-    public Monomial(uint nbits, uint[] bits)
+    public Monomial(uint bitCount)
     {
-        this.nbits = nbits;
-        this.bits = new uint[nbits / 32];
-        Array.Copy(bits, this.bits, nbits / 32);
+        BitCount = bitCount;
+        Bits = new uint[(bitCount + 31) >> 5];
+    }
+    public Monomial(uint bitCount, uint[] bits)
+    {
+        BitCount = bitCount;
+        Bits = new uint[(bitCount + 31) >> 5];
+        Array.Copy(bits, Bits, (bitCount + 31) >> 5);
     }
     public Monomial(Monomial monomial)
     {
-        nbits = monomial.nbits;
-        bits = new uint[nbits / 32];
-        Array.Copy(bits, monomial.bits, nbits / 32);
+        BitCount = monomial.BitCount;
+        Bits = new uint[(BitCount + 31) >> 5];
+        Array.Copy(Bits, monomial.Bits, (BitCount + 31) >> 5);
     }
     public static Monomial operator*(Monomial left, Monomial right)
     {
-        if (left.nbits != right.nbits)
+        if (left.BitCount != right.BitCount)
         {
             throw new ArgumentException("The number of bits of monomials must the the same!");
         }
-        uint[] result = new uint[left.nbits / 32];
+        uint[] result = new uint[(left.BitCount + 31) >> 5];
         for (int i = 0; i < result.Length; ++i)
-            result[i] = left.bits[i] | right.bits[i];
-        return new Monomial(left.nbits, result);
+            result[i] = left.Bits[i] | right.Bits[i];
+        return new Monomial(left.BitCount, result);
     }
     public static Monomial operator/(Monomial left, Monomial right)
     {
@@ -39,31 +55,31 @@ public class Monomial
         {
             throw new ArgumentException("First monomial is not divisible by the second!");
         }
-        if (left.nbits != right.nbits)
+        if (left.BitCount != right.BitCount)
         {
             throw new Exception("The number of bits of monomials must be the same!");
         }
-        uint[] result = new uint[left.nbits / 32];
+        uint[] result = new uint[(left.BitCount + 31) >> 5];
         for (var i = 0; i < result.Length; ++i)
         {
-            result[i] = left.bits[i] ^ right.bits[i];
+            result[i] = left.Bits[i] ^ right.Bits[i];
         }
-        return new Monomial(left.nbits, result);
+        return new Monomial(left.BitCount, result);
     }
     public void Multiply(Monomial other)
     {
-        if (nbits != other.nbits)
+        if (BitCount != other.BitCount)
         {
             throw new ArgumentException("The number of bits of monomials must be the same!");
         }
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
-            bits[i] |= other.bits[i];
+            Bits[i] |= other.Bits[i];
         }
     }
     public void Divide(Monomial other)
     {
-        if (nbits != other.nbits)
+        if (BitCount != other.BitCount)
         {
             throw new ArgumentException("The number of bits of monomials must be the same!");
         }
@@ -71,20 +87,20 @@ public class Monomial
         {
             throw new ArgumentException("First monomial is not divisible by the second!");
         }
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
-            bits[i] ^= other.bits[i];
+            Bits[i] ^= other.Bits[i];
         }
     }
     public bool IsDivisibleBy(Monomial other)
     {
-        if (nbits != other.nbits)
+        if (BitCount != other.BitCount)
         {
             throw new ArgumentException("The number of bits of monomials must be the same!");
         }
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
-            uint tmp = bits[i] | (~other.bits[i]);
+            uint tmp = Bits[i] | (~other.Bits[i]);
             if (tmp != 0xffffffff)
             {
                 return false;
@@ -94,13 +110,13 @@ public class Monomial
     }
     public bool Equals(Monomial other)
     {
-        if (nbits != other.nbits)
+        if (BitCount != other.BitCount)
         {
             return false;
         }
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
-            if (bits[i] != other.bits[i])
+            if (Bits[i] != other.Bits[i])
             {
                 return false;
             }
@@ -114,13 +130,13 @@ public class Monomial
             return false;
         }
         Monomial other = (Monomial)obj;
-        if (nbits != other.nbits)
+        if (BitCount != other.BitCount)
         {
             return false;
         }
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
-            if (bits[i] != other.bits[i])
+            if (Bits[i] != other.Bits[i])
             {
                 return false;
             }
@@ -130,11 +146,11 @@ public class Monomial
     public override int GetHashCode()
     {
         uint result = 0;
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
             for (var j = 0; j < 32; j++)
             {
-                uint bit = (bits[i] >> (31 - j)) & 1;
+                uint bit = (Bits[i] >> (31 - j)) & 1;
                 result = (result * 2 + bit) % 1073741789;
             }
         }
@@ -144,11 +160,12 @@ public class Monomial
     {
         StringBuilder result = new StringBuilder();
         List<string> bits_str = new List<string>();
-        for (var i = 0; i < bits.Length; ++i)
+        for (var i = 0; i < Bits.Length; ++i)
         {
             for (var j = 0; j < 32; ++j)
             {
-                var bit = (bits[i] >> (31 - j)) & 1;
+                if (32 * i + j >= BitCount) break;
+                var bit = (Bits[i] >> (31 - j)) & 1;
                 bits_str.Add($"{bit}");
             }
         }
