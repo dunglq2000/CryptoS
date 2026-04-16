@@ -23,7 +23,7 @@ public class TestMacaulayMatrix
             ]
         );
         MacaulayMatrix macaulayMatrix = new MacaulayMatrix([f, g]);
-        bool result = macaulayMatrix.m_matrix.SequenceEqual([0b10110U << 27, 0b11001U << 27]);
+        bool result = macaulayMatrix.Matrix.SequenceEqual([0b10110U << 27, 0b11001U << 27]);
         Assert.IsTrue(result);
     }
     [TestMethod]

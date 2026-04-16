@@ -11,7 +11,7 @@ public class TestAbstractMatrix
         int ncols = 4;
         AbstractMatrix abstractMatrix = new AbstractMatrix(matrix, nrows, ncols);
         abstractMatrix.Reduce();
-        bool result = abstractMatrix.m_matrix.SequenceEqual([0b1010U << 28, 0b0110U << 28, 0b0001U << 28]);
+        bool result = abstractMatrix.Matrix.SequenceEqual([0b1010U << 28, 0b0110U << 28, 0b0001U << 28]);
         Assert.IsTrue(result);
     }
     [TestMethod]
@@ -22,7 +22,7 @@ public class TestAbstractMatrix
         int ncols = 3;
         AbstractMatrix abstractMatrix = new AbstractMatrix(matrix, nrows, ncols);
         abstractMatrix.Reduce();
-        bool result = abstractMatrix.m_matrix.SequenceEqual([0b101U << 29, 0b011U << 29, 0b000U << 29]);
+        bool result = abstractMatrix.Matrix.SequenceEqual([0b101U << 29, 0b011U << 29, 0b000U << 29]);
         Assert.IsTrue(result);
     }
 }

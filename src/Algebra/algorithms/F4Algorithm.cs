@@ -93,17 +93,19 @@ public class F4Algorithm : GroebnerAlgorithm
             L.Add(left);
             L.Add(right);
         }
-        HashSet<Monomial> done = L.Select(polynomial => polynomial.GetLeadingTerm()).ToHashSet();
-
+        SortedSet<Monomial> done = new SortedSet<Monomial>(monomialOrdering);
+        foreach (var polynomial in L)
+        {
+            done.Add(polynomial.GetLeadingTerm());
+        }
+        SortedSet<Monomial> MonL = new SortedSet<Monomial>(monomialOrdering);
+        foreach (var polynomial in L)
+        {
+            MonL.UnionWith(polynomial.monomials);
+        }
+        
         while (true)
         {
-            HashSet<Monomial> MonL = new HashSet<Monomial>();
-            foreach (var polynomial in L)
-            {
-                foreach (var monomial in polynomial.monomials)
-                    MonL.Add(monomial);
-            }
-
             List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, monomialOrdering).ToList();
             if (diff.Count == 0)
             {
@@ -113,10 +115,13 @@ public class F4Algorithm : GroebnerAlgorithm
             done.Add(m);
             foreach (var g in polynomials)
             {
-                if (m.IsDivisibleBy(g.GetLeadingTerm()))
+                Monomial leadingTermG = g.GetLeadingTerm();
+                if (m.IsDivisibleBy(leadingTermG))
                 {
-                    var f = g; f.Multiply(m / f.GetLeadingTerm());
+                    var f = g;
+                    f.Multiply(m / leadingTermG);
                     L.Add(f);
+                    MonL.UnionWith(f.monomials);
                     break;
                 }
             }
