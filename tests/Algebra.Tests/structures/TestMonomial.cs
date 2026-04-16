@@ -10,11 +10,20 @@ public class TestMonomial
         var degree = f.Degree;
         Assert.AreEqual(11, degree);
     }
+    [TestMethod]
     public void TestMonomial2()
     {
         Monomial f = new Monomial(5, [0b11010U << 27]);
         var degree = f.Degree;
         Assert.AreEqual(3, degree);
+    }
+    [TestMethod]
+    public void TestMonomial3()
+    {
+        Monomial f = new Monomial(5, "x0*x1*x4");
+        Monomial g = new Monomial(5, [0b11001U << 27]);
+        var result = f.Equals(g);
+        Assert.IsTrue(result);
     }
     [TestMethod]
     public void TestMonomialMultiplication1()

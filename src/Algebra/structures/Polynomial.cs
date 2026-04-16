@@ -24,6 +24,16 @@ public class Polynomial
             Add(monomial);
         }
     }
+    public Polynomial(int bitCount, string polynomialString, MonomialOrdering monomialOrdering)
+    {
+        this.monomialOrdering = monomialOrdering;
+        string[] monomialStrings = polynomialString.Replace(" ", "").Split("+");
+        monomials = new List<Monomial>();
+        foreach (var monomialString in monomialStrings)
+        {
+            Add(new Monomial(bitCount, monomialString));
+        }
+    }
     /// <summary>
     /// If a polynomial does not have any monomial, it is zero polynomial.
     /// </summary>

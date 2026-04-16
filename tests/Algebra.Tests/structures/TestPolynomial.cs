@@ -14,6 +14,35 @@ public class TestPolynomial
         Assert.AreEqual(p, q);
     }
     [TestMethod]
+    public void TestPolynomial2()
+    {
+        Polynomial f = new Polynomial(
+            new LexOrdering(),
+            [
+                new Monomial(5, [0b11001U << 27]),
+                new Monomial(5, [0b11000U << 27]),
+                new Monomial(5, [0b00011U << 27])
+            ]
+        );
+        Polynomial g = new Polynomial(5, "x0*x1*x4 + x0*x1 + x3*x4", new LexOrdering());
+        var result = f.Equals(g);
+        Assert.IsTrue(result);
+    }
+    [TestMethod]
+    public void TestPolynomial3()
+    {
+        Polynomial f = new Polynomial(
+            new LexOrdering(),
+            [
+                new Monomial(12, [0b_1110_0001_1010U << 20]),
+                new Monomial(12, [0b_0000_0000_1111U << 20])
+            ]
+        );
+        Polynomial g = new Polynomial(12, "x0*x1*x2*x7*x8*x10 + x8*x9*x10*x11", new LexOrdering());
+        var result = f.Equals(g);
+        Assert.IsTrue(result);
+    }
+    [TestMethod]
     public void TestPolynomialAddition1()
     {
         Monomial a = new Monomial(32, [2952790016U]);   // 1, 0, 1, 1

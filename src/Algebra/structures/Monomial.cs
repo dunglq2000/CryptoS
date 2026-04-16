@@ -1,10 +1,11 @@
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Algebra;
 public class Monomial
 {
-    public readonly uint BitCount;
+    public readonly int BitCount;
     public uint[] Bits;
     /// <summary>
     /// <para>Use fast way to count the number of bits in <c>uint</c></para>
@@ -21,16 +22,30 @@ public class Monomial
             return result;
         }
     }
-    public Monomial(uint bitCount)
+    public Monomial(int bitCount)
     {
         BitCount = bitCount;
         Bits = new uint[(bitCount + 31) >> 5];
     }
-    public Monomial(uint bitCount, uint[] bits)
+    public Monomial(int bitCount, uint[] bits)
     {
         BitCount = bitCount;
         Bits = new uint[(bitCount + 31) >> 5];
         Array.Copy(bits, Bits, (bitCount + 31) >> 5);
+    }
+    public Monomial(int bitCount, string str)
+    {
+        BitCount = bitCount;
+        Bits = new uint[(bitCount + 31) >> 5];
+        string[] variableStrings = str.Split("*");
+        foreach (var variableString in variableStrings)
+        {
+            Match match = Regex.Match(variableString, @"\d+");
+            var index = int.Parse(match.Value);
+            var currentDWORD = index >> 5;
+            var indexInDWORD = index & 0x1f;
+            Bits[currentDWORD] |= 1U << (31 - indexInDWORD);
+        }
     }
     public Monomial(Monomial monomial)
     {
