@@ -10,5 +10,5 @@ public abstract class GroebnerAlgorithm
         _sw = new Stopwatch();
     }
     public abstract List<Polynomial> Compute(List<Polynomial> polynomials);
-    public abstract void Select(List<Polynomial> polynomials);
+    public abstract void Select();
 }

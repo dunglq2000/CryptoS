@@ -2,17 +2,13 @@ namespace Algebra;
 
 public class BuchbergerAlgorithm: GroebnerAlgorithm
 {
-    private List<Tuple<int, int>> _pairs;
-    private List<Tuple<int, int>> _selectedPairs;
-    public BuchbergerAlgorithm()
-    {
-        _pairs = new List<Tuple<int, int>>();
-        _selectedPairs = new List<Tuple<int, int>>();
-    }
+    private List<Tuple<int, int>> _pairs = new List<Tuple<int, int>>();
+    private List<Tuple<int, int>> _selectedPairs = new List<Tuple<int, int>>();
+    private List<Polynomial> _polynomials = new List<Polynomial>();
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
-        List<Polynomial> results = polynomials;
-        var k = results.Count;
+        _polynomials.AddRange(polynomials);
+        var k = _polynomials.Count;
         for (var i = 0; i < k; ++i)
         {
             for (var j = i + 1; j < k; ++j)
@@ -22,16 +18,16 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
         }
         while (_pairs.Count > 0)
         {
-            Select(results);
+            Select();
             _pairs = _pairs.Except(_selectedPairs).ToList();
             foreach (var pair in _selectedPairs)
             {
-                var S = results[pair.Item1].SPoly(results[pair.Item2]);
-                var (r, q) = S.Divide(results);
+                var S = _polynomials[pair.Item1].SPoly(_polynomials[pair.Item2]);
+                var (r, q) = S.Divide(_polynomials);
                 if (r.IsZero() == false)
                 {
                     
-                    results.Add(r);
+                    _polynomials.Add(r);
                     k += 1;
                     for (var i = 0; i < k - 1; ++i)
                     {
@@ -40,9 +36,9 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
                 }
             }
         }
-        return results;
+        return _polynomials;
     }
-    public override void Select(List<Polynomial> polynomials)
+    public override void Select()
     {
         _selectedPairs.Clear();
         _selectedPairs.Add(_pairs[0]);

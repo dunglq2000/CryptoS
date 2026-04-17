@@ -4,10 +4,11 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
 {
     private HashSet<Tuple<int, int>> _pairs = new HashSet<Tuple<int, int>>();
     private HashSet<Tuple<int, int>> _selectedPairs = new HashSet<Tuple<int, int>>();
+    private List<Polynomial> _polynomials = new List<Polynomial>();
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
-        List<Polynomial> G = polynomials;
-        int k = G.Count;
+        _polynomials.AddRange(polynomials);
+        int k = _polynomials.Count;
         for (int i = 0; i < k; ++i)
         {
             for (int j = i + 1; j < k; ++j)
@@ -17,12 +18,12 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         }
         while (_pairs.Count > 0)
         {
-            Select(G);
+            Select();
             _pairs.ExceptWith(_selectedPairs);
-            List<Polynomial> G_ = Reduction(_selectedPairs, G);
+            List<Polynomial> G_ = Reduction();
             foreach (var h in G_)
             {
-                G.Add(h);
+                _polynomials.Add(h);
                 k += 1;
                 for (int i = 0; i < k - 1; ++i)
                 {
@@ -30,9 +31,9 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
                 }
             }
         }
-        return G;
+        return _polynomials;
     }
-    public override void Select(List<Polynomial> polynomials)
+    public override void Select()
     {
         _selectedPairs.Clear();
         int sz = _pairs.Count;
@@ -41,7 +42,7 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         foreach (var pair in _pairs)
         {
             var (u, v) = pair;
-            int degree = (polynomials[u].GetLeadingTerm() * polynomials[v].GetLeadingTerm()).Degree;
+            int degree = (_polynomials[u].GetLeadingTerm() * _polynomials[v].GetLeadingTerm()).Degree;
             minDegree = (minDegree < degree) ? minDegree : degree;
             lcmDegrees.Add(pair, degree);
         }
@@ -53,11 +54,11 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
             }
         }
     }
-    private List<Polynomial> Reduction(HashSet<Tuple<int, int>> selectedPairs, List<Polynomial> polynomials)
+    private List<Polynomial> Reduction()
     {
-        List<Polynomial> L = SymbolicPreprocessing(selectedPairs, polynomials);
-        List<Monomial> leadingMonomials = polynomials.Select(polynomial => polynomial.GetLeadingTerm()).ToList();
-        MacaulayMatrix macaulayMatrix = new MacaulayMatrix(L);
+        HashSet<Polynomial> L = SymbolicPreprocessing();
+        List<Monomial> leadingMonomials = _polynomials.Select(polynomial => polynomial.GetLeadingTerm()).ToList();
+        MacaulayMatrix macaulayMatrix = new MacaulayMatrix(L.ToList());
         macaulayMatrix.Reduce();
         List<Polynomial> L_ = macaulayMatrix.GetPolynomials();
         List<Polynomial> G_ = new List<Polynomial>();
@@ -80,15 +81,15 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         }
         return G_;
     }
-    private List<Polynomial> SymbolicPreprocessing(HashSet<Tuple<int, int>> selectedPairs, List<Polynomial> polynomials)
+    private HashSet<Polynomial> SymbolicPreprocessing()
     {
-        MonomialOrdering monomialOrdering = polynomials[0].monomialOrdering;
+        MonomialOrdering monomialOrdering = _polynomials[0].monomialOrdering;
         HashSet<Polynomial> L = new HashSet<Polynomial>();
-        foreach (var (i, j) in selectedPairs)
+        foreach (var (i, j) in _selectedPairs)
         {
-            Monomial lcm = polynomials[i].GetLeadingTerm() * polynomials[j].GetLeadingTerm();
-            Polynomial left  = polynomials[i] * (lcm / polynomials[i].GetLeadingTerm());
-            Polynomial right = polynomials[j] * (lcm / polynomials[j].GetLeadingTerm());
+            Monomial lcm = _polynomials[i].GetLeadingTerm() * _polynomials[j].GetLeadingTerm();
+            Polynomial left  = _polynomials[i] * (lcm / _polynomials[i].GetLeadingTerm());
+            Polynomial right = _polynomials[j] * (lcm / _polynomials[j].GetLeadingTerm());
             L.Add(left);
             L.Add(right);
         }
@@ -110,7 +111,7 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
             }
             Monomial m = diff[diff.Count - 1];
             done.Add(m);
-            foreach (var g in polynomials)
+            foreach (var g in _polynomials)
             {
                 Monomial leadingTermG = g.GetLeadingTerm();
                 if (m.IsDivisibleBy(leadingTermG))
@@ -124,6 +125,6 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
             }
         }
         // Console.WriteLine($"\t\tNumber of monomials: {MonL.Count}");
-        return L.ToList();
+        return L;
     }
 }
