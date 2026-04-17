@@ -28,6 +28,7 @@ public class AbstractMatrix
         int nwords = (_ncols + 31) >> 5;
         for (int col = 0; col < _ncols && pivotRow < _nrows; ++col)
         {
+            // First row below row <c>pivotRow</c> that has bit 1 in column <c>col</c>
             int sel = pivotRow;
             int current_dword = col >> 5;
             int index = col & 0x1f;
@@ -57,7 +58,8 @@ public class AbstractMatrix
             // 3. Eliminate other 1's in this column
             for (int i = 0; i < _nrows; ++i)
             {
-                if (i != pivotRow && (Matrix[i * nwords + current_dword] & (1U << (31 - index))) != 0)
+                if (i == pivotRow) continue;
+                if ((Matrix[i * nwords + current_dword] & (1U << (31 - index))) != 0)
                 {
                     Parallel.For(current_dword, nwords, k =>
                     {
@@ -80,7 +82,7 @@ public class AbstractMatrix
             for (int j = 0; j < _ncols; ++j)
             {
                 int current_dword = j >> 5;
-                int index = j % 32;
+                int index = j & 0x1f;
                 row_bits.Add($"{(Matrix[i * nwords + current_dword] >> (31 - index)) & 1}");
             }
             row_string_builder.AppendJoin(", ", row_bits);
