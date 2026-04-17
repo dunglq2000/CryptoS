@@ -8,17 +8,17 @@ namespace Algebra;
 /// </summary>
 public class Polynomial
 {
-    public List<Monomial> monomials { get; set; }
-    public readonly MonomialOrdering monomialOrdering;
+    public List<Monomial> Monomials { get; set; }
+    public readonly MonomialOrdering Order;
     public Polynomial(MonomialOrdering monomialOrdering)
     {
-        this.monomialOrdering = monomialOrdering;
-        monomials = new List<Monomial>();
+        Order = monomialOrdering;
+        Monomials = new List<Monomial>();
     }
     public Polynomial(MonomialOrdering monomialOrdering, List<Monomial> monomials)
     {
-        this.monomialOrdering = monomialOrdering;
-        this.monomials = new List<Monomial>();
+        Order = monomialOrdering;
+        Monomials = new List<Monomial>();
         foreach(var monomial in monomials)
         {
             Add(monomial);
@@ -26,9 +26,9 @@ public class Polynomial
     }
     public Polynomial(int bitCount, string polynomialString, MonomialOrdering monomialOrdering)
     {
-        this.monomialOrdering = monomialOrdering;
+        Order = monomialOrdering;
         string[] monomialStrings = polynomialString.Replace(" ", "").Split("+");
-        monomials = new List<Monomial>();
+        Monomials = new List<Monomial>();
         foreach (var monomialString in monomialStrings)
         {
             Add(new Monomial(bitCount, monomialString));
@@ -40,7 +40,7 @@ public class Polynomial
     /// <returns>true if polynomial is zero, false otherwise.</returns>
     public bool IsZero()
     {
-        return monomials.Count == 0;
+        return Monomials.Count == 0;
     }
     /// <summary>
     /// Operator for adding polynomial and monomial
@@ -50,8 +50,8 @@ public class Polynomial
     /// <returns>New polynomial which is the result of <c>polynomial + monomial</c></returns>
     public static Polynomial operator+(Polynomial polynomial, Monomial monomial)
     {
-        MonomialOrdering monomialOrdering = polynomial.monomialOrdering;
-        List<Monomial> monomials = polynomial.monomials;
+        MonomialOrdering monomialOrdering = polynomial.Order;
+        List<Monomial> monomials = polynomial.Monomials;
         var index = monomials.BinarySearch(monomial, monomialOrdering);
         if (index < 0) 
         {
@@ -66,8 +66,8 @@ public class Polynomial
     }
     public static Polynomial operator+(Polynomial left, Polynomial right)
     {
-        List<Monomial> monomials = left.monomials.Concat(right.monomials).ToList();
-        return new Polynomial(left.monomialOrdering, monomials);
+        List<Monomial> monomials = left.Monomials.Concat(right.Monomials).ToList();
+        return new Polynomial(left.Order, monomials);
     }
     /// <summary>
     /// Operator for multiplying polynomial and monomial
@@ -77,8 +77,8 @@ public class Polynomial
     /// <returns>New polynomial which is the result of <c>polynomial * monomial</c></returns>
     public static Polynomial operator*(Polynomial polynomial, Monomial monomial)
     {
-        MonomialOrdering monomialOrdering = polynomial.monomialOrdering;
-        List<Monomial> monomials = polynomial.monomials.Select(mono => mono * monomial).ToList();
+        MonomialOrdering monomialOrdering = polynomial.Order;
+        List<Monomial> monomials = polynomial.Monomials.Select(mono => mono * monomial).ToList();
         return new Polynomial(monomialOrdering, monomials);
     }
     /// <summary>
@@ -87,20 +87,20 @@ public class Polynomial
     /// <param name="monomial">Monomial to be added</param>
     public void Add(Monomial monomial)
     {
-        var index = monomials.BinarySearch(monomial, monomialOrdering);
+        var index = Monomials.BinarySearch(monomial, Order);
         if (index < 0) 
         {
             index = ~index;
-            monomials.Insert(index, monomial);
+            Monomials.Insert(index, monomial);
         }
         else
         {
-            monomials.Remove(monomial);
+            Monomials.Remove(monomial);
         }
     }
     public void Add(Polynomial polynomial)
     {
-        foreach (var monomial in polynomial.monomials)
+        foreach (var monomial in polynomial.Monomials)
         {
             Add(monomial);
         }
@@ -111,8 +111,8 @@ public class Polynomial
     /// <param name="monomial">Monomial to be multiplied</param>
     public void Multiply(Monomial monomial)
     {
-        List<Monomial> newMonmials = monomials.Select(mono => mono * monomial).ToList();
-        monomials.Clear();
+        List<Monomial> newMonmials = Monomials.Select(mono => mono * monomial).ToList();
+        Monomials.Clear();
         foreach (var mono in newMonmials)
         {
             Add(mono);
@@ -140,7 +140,7 @@ public class Polynomial
         {
             throw new ArgumentException("Can not divide one polynomial for zero polynomials!");
         }
-        MonomialOrdering monomialOrdering = polynomials[0].monomialOrdering;
+        MonomialOrdering monomialOrdering = polynomials[0].Order;
         Polynomial r = new Polynomial(monomialOrdering);
         List<Polynomial> q = new List<Polynomial>();
         for (var j = 0; j < polynomials.Count; ++j)
@@ -170,24 +170,24 @@ public class Polynomial
     }
     public Monomial GetLeadingTerm()
     {
-        if (monomials.Count == 0)
+        if (Monomials.Count == 0)
         {
             throw new ArgumentException("Zero polynomial does not have leading term.");
         }
         else
         {
-            return monomials[monomials.Count - 1]; // get last elements
+            return Monomials[Monomials.Count - 1]; // get last elements
         }
     }
     public bool Equals(Polynomial other)
     {
-        if (monomials.Count != other.monomials.Count)
+        if (Monomials.Count != other.Monomials.Count)
         {
             return false;
         }
-        for (var i = 0; i < monomials.Count; ++i)
+        for (var i = 0; i < Monomials.Count; ++i)
         {
-            if (monomials[i].Equals(other.monomials[i]) == false)
+            if (Monomials[i].Equals(other.Monomials[i]) == false)
             {
                 return false;
             }
@@ -201,13 +201,13 @@ public class Polynomial
             return false;
         }
         Polynomial other = (Polynomial)obj;
-        if (monomials.Count != other.monomials.Count)
+        if (Monomials.Count != other.Monomials.Count)
         {
             return false;
         }
-        for (var i = 0; i < monomials.Count; ++i)
+        for (var i = 0; i < Monomials.Count; ++i)
         {
-            if (monomials[i].Equals(other.monomials[i]) == false)
+            if (Monomials[i].Equals(other.Monomials[i]) == false)
             {
                 return false;
             }
@@ -218,9 +218,9 @@ public class Polynomial
     {
         int modulus = 1069482893;
         int result = 0;
-        for (var i = 0; i < monomials.Count; ++i)
+        for (var i = 0; i < Monomials.Count; ++i)
         {
-            result = (result * 2 + monomials[i].GetHashCode()) % modulus;
+            result = (result * 2 + Monomials[i].GetHashCode()) % modulus;
         }
         return result;
     }
@@ -228,9 +228,9 @@ public class Polynomial
     {
         StringBuilder result = new StringBuilder();
         List<string> strings = new List<string>();
-        for (var i = monomials.Count - 1; i >= 0 ; --i)
+        for (var i = Monomials.Count - 1; i >= 0 ; --i)
         {
-            strings.Add($"({monomials[i]})");
+            strings.Add($"({Monomials[i]})");
         }
         result.AppendJoin(" + ", strings);
         return result.ToString();

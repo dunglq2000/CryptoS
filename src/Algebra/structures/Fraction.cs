@@ -2,8 +2,8 @@ namespace Algebra
 {
     public class Fraction
     {
-        public int numerator { get; set; }
-        public int denominator { get; set; }
+        public int Numerator { get; set; }
+        public int Denominator { get; set; }
         public Fraction(int numerator, int denominator)
         {
             if (denominator == 0)
@@ -14,28 +14,28 @@ namespace Algebra
             if (d < 0) d = -d;
             if (denominator > 0)
             {
-                this.numerator = numerator / d;
-                this.denominator = denominator / d;
+                this.Numerator = numerator / d;
+                this.Denominator = denominator / d;
             }
             else
             {
-                this.numerator = numerator / (-d);
-                this.denominator = denominator / (-d);
+                this.Numerator = numerator / (-d);
+                this.Denominator = denominator / (-d);
             }
         }
         public static Fraction operator+(Fraction left, Fraction right)
         {
-            int numerator = left.numerator * right.denominator + left.denominator * right.numerator;
-            int denominator = left.denominator * right.denominator;
+            int numerator = left.Numerator * right.Denominator + left.Denominator * right.Numerator;
+            int denominator = left.Denominator * right.Denominator;
             return new Fraction(numerator, denominator);
         }
         public static bool operator==(Fraction left, Fraction right)
         {
-            return (left.numerator == right.numerator) && (left.denominator == right.denominator);   
+            return (left.Numerator == right.Numerator) && (left.Denominator == right.Denominator);   
         }
         public static bool operator!=(Fraction left, Fraction right)
         {
-            return (left.numerator != right.numerator) || (left.denominator != right.denominator);
+            return (left.Numerator != right.Numerator) || (left.Denominator != right.Denominator);
         }
         public override bool Equals(object? obj)
         {
@@ -44,15 +44,15 @@ namespace Algebra
                 return false;
             }
             Fraction other = (Fraction)obj;
-            return (numerator == other.numerator) && (denominator == other.denominator);
+            return (Numerator == other.Numerator) && (Denominator == other.Denominator);
         }
         public override int GetHashCode()
         {
-            return numerator * denominator;
+            return Numerator * Denominator;
         }
         public override string ToString()
         {
-            return $"{numerator}/{denominator}";
+            return $"{Numerator}/{Denominator}";
         }
         private int GCD(int a, int b)
         {

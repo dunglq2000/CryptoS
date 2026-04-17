@@ -5,8 +5,10 @@ public class F4AlgorithmList : GroebnerAlgorithm
     private List<Tuple<int, int>> _pairs = new List<Tuple<int, int>>();
     private List<Tuple<int, int>> _selectedPairs = new List<Tuple<int, int>>();
     private List<Polynomial> _polynomials = new List<Polynomial>();
+    private MonomialOrdering? _monomialOrdering = null;
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
+        _monomialOrdering = polynomials[0].Order;
         _polynomials.AddRange(polynomials);
         int k = _polynomials.Count;
         for (int i = 0; i < k; ++i)
@@ -83,7 +85,6 @@ public class F4AlgorithmList : GroebnerAlgorithm
     }
     private HashSet<Polynomial> SymbolicPreprocessing()
     {
-        MonomialOrdering monomialOrdering = _polynomials[0].monomialOrdering;
         HashSet<Polynomial> L = new HashSet<Polynomial>();
         foreach (var (i, j) in _selectedPairs)
         {
@@ -93,16 +94,16 @@ public class F4AlgorithmList : GroebnerAlgorithm
         }
         SortedSet<Monomial> done = new SortedSet<Monomial>(
             L.Select(polynomial => polynomial.GetLeadingTerm()), 
-            monomialOrdering
+            _monomialOrdering
         );
-        SortedSet<Monomial> MonL = new SortedSet<Monomial>(monomialOrdering);
+        SortedSet<Monomial> MonL = new SortedSet<Monomial>(_monomialOrdering);
         foreach (var polynomial in L)
         {
-            MonL.UnionWith(polynomial.monomials);
+            MonL.UnionWith(polynomial.Monomials);
         }
         while (true)
         {
-            List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, monomialOrdering).ToList();
+            List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, _monomialOrdering).ToList();
             if (diff.Count == 0)
             {
                 break;
@@ -117,7 +118,7 @@ public class F4AlgorithmList : GroebnerAlgorithm
                     var f = g;
                     f.Multiply(m / leadingTermG);
                     L.Add(f);
-                    MonL.UnionWith(f.monomials);
+                    MonL.UnionWith(f.Monomials);
                     break;
                 }
             }

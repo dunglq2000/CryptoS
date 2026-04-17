@@ -9,11 +9,11 @@ public class MacaulayMatrix : AbstractMatrix
     private readonly MonomialOrdering _monomialOrdering;
     public MacaulayMatrix(List<Polynomial> polynomials)
     {
-        _monomialOrdering = polynomials[0].monomialOrdering;
+        _monomialOrdering = polynomials[0].Order;
         _monomials = new List<Monomial>();
         foreach (var polynomial in polynomials)
         {
-            _monomials.AddRange(polynomial.monomials);
+            _monomials.AddRange(polynomial.Monomials);
         }
         _monomials = _monomials.Distinct().OrderBy(monomial => monomial, _monomialOrdering).ToList();
         _nrows = polynomials.Count;
@@ -27,7 +27,7 @@ public class MacaulayMatrix : AbstractMatrix
             {
                 int current_dword = j >> 5;
                 int col_in_dword = j & 0x1f;
-                int index = polynomials[i].monomials.BinarySearch(_monomials[_ncols - 1 - j], _monomialOrdering);
+                int index = polynomials[i].Monomials.BinarySearch(_monomials[_ncols - 1 - j], _monomialOrdering);
                 if (index >= 0)
                 {
                     Matrix[i * ndwords + current_dword] |= 1U << (31 - col_in_dword);

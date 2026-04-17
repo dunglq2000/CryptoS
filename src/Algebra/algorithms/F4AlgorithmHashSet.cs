@@ -5,8 +5,10 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
     private HashSet<Tuple<int, int>> _pairs = new HashSet<Tuple<int, int>>();
     private HashSet<Tuple<int, int>> _selectedPairs = new HashSet<Tuple<int, int>>();
     private List<Polynomial> _polynomials = new List<Polynomial>();
+    private MonomialOrdering? _monomialOrdering = null;
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
+        _monomialOrdering = polynomials[0].Order;
         _polynomials.AddRange(polynomials);
         int k = _polynomials.Count;
         for (int i = 0; i < k; ++i)
@@ -36,7 +38,6 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
     public override void Select()
     {
         _selectedPairs.Clear();
-        int sz = _pairs.Count;
         Dictionary<Tuple<int, int>, int> lcmDegrees = new Dictionary<Tuple<int, int>, int>();
         int minDegree = int.MaxValue;
         foreach (var pair in _pairs)
@@ -57,7 +58,7 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
     private List<Polynomial> Reduction()
     {
         HashSet<Polynomial> L = SymbolicPreprocessing();
-        List<Monomial> leadingMonomials = _polynomials.Select(polynomial => polynomial.GetLeadingTerm()).ToList();
+        HashSet<Monomial> leadingMonomials = _polynomials.Select(polynomial => polynomial.GetLeadingTerm()).ToHashSet();
         MacaulayMatrix macaulayMatrix = new MacaulayMatrix(L.ToList());
         macaulayMatrix.Reduce();
         List<Polynomial> L_ = macaulayMatrix.GetPolynomials();
@@ -83,7 +84,6 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
     }
     private HashSet<Polynomial> SymbolicPreprocessing()
     {
-        MonomialOrdering monomialOrdering = _polynomials[0].monomialOrdering;
         HashSet<Polynomial> L = new HashSet<Polynomial>();
         foreach (var (i, j) in _selectedPairs)
         {
@@ -95,16 +95,16 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         }
         SortedSet<Monomial> done = new SortedSet<Monomial>(
             L.Select(polynomial => polynomial.GetLeadingTerm()), 
-            monomialOrdering
+            _monomialOrdering
         );
-        SortedSet<Monomial> MonL = new SortedSet<Monomial>(monomialOrdering);
+        SortedSet<Monomial> MonL = new SortedSet<Monomial>(_monomialOrdering);
         foreach (var polynomial in L)
         {
-            MonL.UnionWith(polynomial.monomials);
+            MonL.UnionWith(polynomial.Monomials);
         }
         while (true)
         {
-            List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, monomialOrdering).ToList();
+            List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, _monomialOrdering).ToList();
             if (diff.Count == 0)
             {
                 break;
@@ -119,12 +119,11 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
                     var f = g;
                     f.Multiply(m / leadingTermG);
                     L.Add(f);
-                    MonL.UnionWith(f.monomials);
+                    MonL.UnionWith(f.Monomials);
                     break;
                 }
             }
         }
-        // Console.WriteLine($"\t\tNumber of monomials: {MonL.Count}");
         return L;
     }
 }
