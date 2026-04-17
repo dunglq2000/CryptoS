@@ -1,63 +1,62 @@
 namespace Algebra;
 
-public class F4Algorithm : GroebnerAlgorithm
+public class F4AlgorithmList : GroebnerAlgorithm
 {
+    private List<Tuple<int, int>> _pairs = new List<Tuple<int, int>>();
+    private List<Tuple<int, int>> _selectedPairs = new List<Tuple<int, int>>();
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
         List<Polynomial> G = polynomials;
         int k = G.Count;
-        List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
         for (int i = 0; i < k; ++i)
         {
             for (int j = i + 1; j < k; ++j)
             {
-                pairs.Add(new Tuple<int, int>(i, j));
+                _pairs.Add(new Tuple<int, int>(i, j));
             }
         }
-        while (pairs.Count > 0)
+        while (_pairs.Count > 0)
         {
-            List<Tuple<int, int>> selectedPairs = Select(pairs, G);
-            pairs = pairs.Except(selectedPairs).ToList();
-            List<Polynomial> G_ = Reduction(selectedPairs, G);
+            Select(G);
+            _pairs = _pairs.Except(_selectedPairs).ToList();
+            List<Polynomial> G_ = Reduction(_selectedPairs, G);
             foreach (var h in G_)
             {
                 G.Add(h);
                 k += 1;
                 for (int i = 0; i < k - 1; ++i)
                 {
-                    pairs.Add(new Tuple<int, int>(i, k - 1));
+                    _pairs.Add(new Tuple<int, int>(i, k - 1));
                 }
             }
         }
         return G;
     }
-    public override List<Tuple<int, int>> Select(List<Tuple<int, int>> pairs, List<Polynomial> polynomials)
+    public override void Select(List<Polynomial> polynomials)
     {
-        int sz = pairs.Count;
+        _selectedPairs.Clear();
+        int sz = _pairs.Count;
         List<int> lcmDegrees = new List<int>(sz);
         int minDegree = int.MaxValue;
         for (int i = 0; i < sz; ++i)
         {
-            var (u, v) = pairs[i];
+            var (u, v) = _pairs[i];
             int degree = (polynomials[u].GetLeadingTerm() * polynomials[v].GetLeadingTerm()).Degree;
             minDegree = (minDegree < degree) ? minDegree : degree;
             lcmDegrees.Add(degree);
         }
-        List<Tuple<int, int>> selectedPairs = new List<Tuple<int, int>>();
         for (int i = 0; i < sz; ++i)
         {
             if (lcmDegrees[i] == minDegree)
             {
-                selectedPairs.Add(pairs[i]);
+                _selectedPairs.Add(_pairs[i]);
             }
         }
-        return selectedPairs;
     }
     private List<Polynomial> Reduction(List<Tuple<int, int>> selectedPairs, List<Polynomial> polynomials)
     {
         List<Polynomial> L = SymbolicPreprocessing(selectedPairs, polynomials);
         List<Monomial> leadingMonomials = polynomials.Select(polynomial => polynomial.GetLeadingTerm()).ToList();
-
         MacaulayMatrix macaulayMatrix = new MacaulayMatrix(L);
         macaulayMatrix.Reduce();
         List<Polynomial> L_ = macaulayMatrix.GetPolynomials();
@@ -93,17 +92,15 @@ public class F4Algorithm : GroebnerAlgorithm
             L.Add(left);
             L.Add(right);
         }
-        SortedSet<Monomial> done = new SortedSet<Monomial>(monomialOrdering);
-        foreach (var polynomial in L)
-        {
-            done.Add(polynomial.GetLeadingTerm());
-        }
+        SortedSet<Monomial> done = new SortedSet<Monomial>(
+            L.Select(polynomial => polynomial.GetLeadingTerm()), 
+            monomialOrdering
+        );
         SortedSet<Monomial> MonL = new SortedSet<Monomial>(monomialOrdering);
         foreach (var polynomial in L)
         {
             MonL.UnionWith(polynomial.monomials);
         }
-        
         while (true)
         {
             List<Monomial> diff = MonL.Except(done).OrderBy(monomial => monomial, monomialOrdering).ToList();
@@ -126,6 +123,7 @@ public class F4Algorithm : GroebnerAlgorithm
                 }
             }
         }
+        // Console.WriteLine($"\t\tNumber of monomials: {MonL.Count}");
         return L.ToList();
     }
 }

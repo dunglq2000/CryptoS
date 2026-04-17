@@ -1,7 +1,14 @@
+using System.Diagnostics;
+
 namespace Algebra;
 
 public abstract class GroebnerAlgorithm
 {
+    protected Stopwatch _sw;
+    public GroebnerAlgorithm()
+    {
+        _sw = new Stopwatch();
+    }
     public abstract List<Polynomial> Compute(List<Polynomial> polynomials);
-    public abstract List<Tuple<int, int>> Select(List<Tuple<int, int>> pairs, List<Polynomial> polynomials);
+    public abstract void Select(List<Polynomial> polynomials);
 }

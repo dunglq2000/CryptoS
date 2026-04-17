@@ -2,23 +2,29 @@ namespace Algebra;
 
 public class BuchbergerAlgorithm: GroebnerAlgorithm
 {
+    private List<Tuple<int, int>> _pairs;
+    private List<Tuple<int, int>> _selectedPairs;
+    public BuchbergerAlgorithm()
+    {
+        _pairs = new List<Tuple<int, int>>();
+        _selectedPairs = new List<Tuple<int, int>>();
+    }
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
         List<Polynomial> results = polynomials;
         var k = results.Count;
-        List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
         for (var i = 0; i < k; ++i)
         {
             for (var j = i + 1; j < k; ++j)
             {
-                pairs.Add(new Tuple<int, int>(i, j));
+                _pairs.Add(new Tuple<int, int>(i, j));
             }
         }
-        while (pairs.Count > 0)
+        while (_pairs.Count > 0)
         {
-            var selectedPairs = Select(pairs, results);
-            pairs = pairs.Except(selectedPairs).ToList();
-            foreach (var pair in selectedPairs)
+            Select(results);
+            _pairs = _pairs.Except(_selectedPairs).ToList();
+            foreach (var pair in _selectedPairs)
             {
                 var S = results[pair.Item1].SPoly(results[pair.Item2]);
                 var (r, q) = S.Divide(results);
@@ -29,15 +35,16 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
                     k += 1;
                     for (var i = 0; i < k - 1; ++i)
                     {
-                        pairs.Add(new Tuple<int, int>(i, k - 1));
+                        _pairs.Add(new Tuple<int, int>(i, k - 1));
                     }
                 }
             }
         }
         return results;
     }
-    public override List<Tuple<int, int>> Select(List<Tuple<int, int>> pairs, List<Polynomial> polynomials)
+    public override void Select(List<Polynomial> polynomials)
     {
-        return [pairs[0]];
+        _selectedPairs.Clear();
+        _selectedPairs.Add(_pairs[0]);
     }
 }
