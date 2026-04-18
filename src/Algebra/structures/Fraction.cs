@@ -14,13 +14,13 @@ namespace Algebra
             if (d < 0) d = -d;
             if (denominator > 0)
             {
-                this.Numerator = numerator / d;
-                this.Denominator = denominator / d;
+                Numerator = numerator / d;
+                Denominator = denominator / d;
             }
             else
             {
-                this.Numerator = numerator / (-d);
-                this.Denominator = denominator / (-d);
+                Numerator = numerator / (-d);
+                Denominator = denominator / (-d);
             }
         }
         public static Fraction operator+(Fraction left, Fraction right)
@@ -28,6 +28,16 @@ namespace Algebra
             int numerator = left.Numerator * right.Denominator + left.Denominator * right.Numerator;
             int denominator = left.Denominator * right.Denominator;
             return new Fraction(numerator, denominator);
+        }
+        public static Fraction operator-(Fraction left, Fraction right)
+        {
+            int numerator = left.Numerator * right.Denominator - left.Denominator * right.Numerator;
+            int denominator = left.Denominator * right.Denominator;
+            return new Fraction(numerator, denominator);
+        }
+        public static Fraction operator*(Fraction left, Fraction right)
+        {
+            return new Fraction(left.Numerator * right.Numerator, left.Denominator * right.Denominator);
         }
         public static bool operator==(Fraction left, Fraction right)
         {
@@ -61,6 +71,10 @@ namespace Algebra
                 (a, b) = (b, a % b);
             }
             return a;
+        }
+        private int LCM(int a, int b)
+        {
+            return a * b / GCD(a, b);
         }
     }
 }

@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="main/main.csproj" />
+  <Project Path="src/Crypto/Crypto.csproj" />
+  <Project Path="tests/Crypto.Tests/Crypto.Tests.csproj" />
   <Project Path="src/Algebra/Algebra.csproj" />
   <Project Path="tests/Algebra.Tests/Algebra.Tests.csproj" />
 </Solution>

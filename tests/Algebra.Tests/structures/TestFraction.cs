@@ -29,4 +29,12 @@ public class TestFraction
         Fraction c = a + b;
         Assert.AreEqual(c, new Fraction(5, 12));
     }
+    [TestMethod]
+    public void TestFraction5()
+    {
+        Fraction a = new Fraction(1, 3);
+        Fraction b = new Fraction(6, 7);
+        Fraction c = a * b;
+        Assert.AreEqual(c, new Fraction(2, 7));
+    }
 }
