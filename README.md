@@ -20,6 +20,7 @@ Features:
    - find Gröbner basis with Buchberger's algorithm and Faugère's F4 algorithm.
 
 3. Sudoku's solver with bruteforce approach. See more at [Sudoku](./src/Sudoku/README.md).
+4. Graph theory: traverse through the graph with popular algorithms (DFS, BFS), find path between two vertices, find strong connected components. See more at [GraphTheory](./src/GraphTheory/README.md).
 
 ## Project structure
 
@@ -47,6 +48,7 @@ Project structure:
     - `Magma.cs`: Magma cipher, described in [1]
   
   - `Sudoku/SudokuMatrix.cs`: solve the Sudoku problem using bruteforce approach.
+  - `GraphTheory/Graph.cs`: graph structure that allows traverse through the graph with popular algorithms (DFS, BFS), find path between two vertices, find strong connected components.
 
 - `tests/`:
 
@@ -92,6 +94,7 @@ Tính năng:
    - tìm cơ sở Gröbner bằng thuật toán Buchberger và thuật toán F4 của Faugère
 
 3. Giải trò chơi Sudoku với phương pháp vét cạn. Xem thêm tại [Sudoku](./src/Sudoku/README.md).
+4. Lý thuyết đồ thị: duyệt đồ thị với các thuật toán phổ biến (DFS, BFS), tìm đường đi giữa hai đỉnh, tìm các thành phần liên thông mạnh. Xem thêm tại [GraphTheory](./src/GraphTheory/README.md).
 
 ## Cấu trúc thư mục
 
@@ -117,6 +120,7 @@ Cấu trúc thư mục:
     - `Magma.cs`: thuật toán Magma [1];
 
   - `Sudodu/SudokuMatrix.cs`: giải trò chơi Sudoku bằng phương pháp vét cạn.
+  - `GraphTheory/Graph.cs`: cấu trúc mô tả đồ thị, cho phép duyệt đồ thị với các thuật toán phổ biến (DFS, BFS), tìm đường đi giữa hai đỉnh, tìm các thành phần liên thông mạnh.
 
 - `tests/`:
 
