@@ -3,6 +3,8 @@
   <Project Path="src/Crypto/Crypto.csproj" />
   <Project Path="tests/Crypto.Tests/Crypto.Tests.csproj" />
   <Project Path="src/GraphTheory/GraphTheory.csproj" />
+  <Project Path="src/Misc/Misc.csproj" />
+  <Project Path="tests/Misc.Tests/Misc.Tests.csproj" />
   <Project Path="src/Algebra/Algebra.csproj" />
   <Project Path="tests/Algebra.Tests/Algebra.Tests.csproj" />
 </Solution>
