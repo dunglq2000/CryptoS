@@ -1,7 +1,13 @@
-﻿namespace Crypto
+﻿namespace Crypto.GostCrypto
 {
+    /// <summary>
+    /// Kuznyechik block cipher.
+    /// </summary>
     public class Kuznyechik
     {
+        /// <summary>
+        /// 256-bit key.
+        /// </summary>
         public readonly byte[] Key;
         private const int BlockSize = 16;
         private const int KeySize = 32;
@@ -75,15 +81,26 @@
             0x12, 0x1A, 0x48, 0x68, 0xF5, 0x81, 0x8B, 0xC7,
             0xD6, 0x20, 0x0A, 0x08, 0x00, 0x4C, 0xD7, 0x74
         ];
-        public static byte[][] c = new byte[KeySize][];
-        public byte[][] subkeys = new byte[10][];
+        /// <summary>
+        /// Constants used for generating subkeys.
+        /// </summary>
+        public static byte[][] C = new byte[KeySize][];
+        /// <summary>
+        /// Subkeys generated from master key <see cref="Key"/>.
+        /// </summary>
+        public byte[][] Subkeys = new byte[10][];
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="key">Input 256-bit/32-byte key.</param>
+        /// <exception cref="Exception">Key size must equal to 256 bits.</exception>
         public Kuznyechik(byte[] key)
         {
             if (key.Length != KeySize)
             {
-                throw new Exception("Key size must equal to 256 bit");
+                throw new Exception("Key size must equal to 256 bits");
             }
-            this.Key = key.ToArray();
+            Key = key.ToArray();
             byte[] key0 = new byte[KeySize / 2];
             byte[] key1 = new byte[KeySize / 2];
             for (int i = 0; i < 16; i++)
@@ -94,13 +111,24 @@
             Constants();
             ExpandKey(key0, key1);
         }
-        byte[] X(byte[] state, byte[] subkey)
+        /// <summary>
+        /// Operation X for Kuznyechik.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <param name="subkey">Subkey.</param>
+        /// <returns>New matrix state.</returns>
+        private byte[] X(byte[] state, byte[] subkey)
         {
             byte[] result = new byte[BlockSize];
             for (int i = 0; i < BlockSize; i++)
                 result[i] = (byte)(state[i] ^ subkey[i]);
             return result;
         }
+        /// <summary>
+        /// Operation S for Kuznyechik, which is equivalent to SubBytes of AES.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] S(byte[] state)
         {
             byte[] result = new byte[BlockSize];
@@ -108,6 +136,11 @@
                 result[i] = pi[state[i]];
             return result;
         }
+        /// <summary>
+        /// Operation inverse S for Kuznyechik, which is equivalent to inverse SubBytes of AES.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] S_inv(byte[] state)
         {
             byte[] result = new byte[BlockSize];
@@ -137,10 +170,15 @@
             }
             return result;
         }
+        /// <summary>
+        /// Operation R for Kuznyechik.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] R(byte[] state)
         {
             byte lambda = 0;
-            byte[] coeffs = new byte[BlockSize] { 148, 32, 133, 16, 194, 192, 1, 251, 1, 192, 194, 16, 133, 32, 148, 1 };
+            byte[] coeffs = [ 148, 32, 133, 16, 194, 192, 1, 251, 1, 192, 194, 16, 133, 32, 148, 1 ];
             byte[] result = new byte[BlockSize];
             for (int i = 0; i < BlockSize; i++)
             {
@@ -153,6 +191,11 @@
             result[0] = lambda;
             return result;
         }
+        /// <summary>
+        /// Operation inverse R for Kuznyechik.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] R_inv(byte[] state)
         {
             byte tmp = state[0];
@@ -161,7 +204,7 @@
             state[BlockSize - 1] = tmp;
 
             byte lambda = 0;
-            byte[] coeffs = { 148, 32, 133, 16, 194, 192, 1, 251, 1, 192, 194, 16, 133, 32, 148, 1 };
+            byte[] coeffs = [ 148, 32, 133, 16, 194, 192, 1, 251, 1, 192, 194, 16, 133, 32, 148, 1 ];
             byte[] result = new byte[BlockSize];
             for (int i = 0; i < BlockSize; i++)
             {
@@ -174,6 +217,11 @@
             result[BlockSize - 1] = lambda;
             return result;
         }
+        /// <summary>
+        /// Operation L for Kuznyechik.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] L(byte[] state)
         {
             byte[] result = state.ToArray();
@@ -183,6 +231,11 @@
             }
             return result;
         }
+        /// <summary>
+        /// Operation inverse L for Kuznyechik.
+        /// </summary>
+        /// <param name="state">Current matrix state.</param>
+        /// <returns>New matrix state.</returns>
         public static byte[] L_inv(byte[] state)
         {
             byte[] result = state.ToArray();
@@ -202,52 +255,77 @@
             }
             return result;
         }
+        /// <summary>
+        /// Generate constants <see cref="C"/> for key expansion.
+        /// </summary>
         public static void Constants()
         {
             for (int i = 0; i < 32; i++)
             {
-                c[i] = L(ToVec128((UInt128)(i + 1)));
+                C[i] = L(ToVec128((UInt128)(i + 1)));
             }
         }
+        /// <summary>
+        /// Generate two new subkeys with given two previous subkeys with Feistel's network.
+        /// </summary>
+        /// <param name="key0">First previous subkey.</param>
+        /// <param name="key1">Second previous subkey.</param>
+        /// <param name="constants">Constant used for generating subkey.</param>
+        /// <returns>Two new subkeys.</returns>
         byte[][] F(byte[] key0, byte[] key1, byte[] constants)
         {
             byte[] data = L(S(X(key1, constants)));
             byte[][] result = [X(data, key0), key1.ToArray()];
             return result;
         }
+        /// <summary>
+        /// Generate all subkeys from master key, which is divided into <paramref name="key0"/> and <paramref name="key1"/>.
+        /// </summary>
+        /// <param name="key0">First 128 bits of master key.</param>
+        /// <param name="key1">Second 128 bits of master key.</param>
         void ExpandKey(byte[] key0, byte[] key1)
         {
-            subkeys[0] = key0.ToArray();
-            subkeys[1] = key1.ToArray();
+            Subkeys[0] = key0.ToArray();
+            Subkeys[1] = key1.ToArray();
 
             for (int i = 0; i < 4; i++)
             {
-                byte[][] data = F(subkeys[2 * i + 1], subkeys[2 * i], c[8 * i]);
+                byte[][] data = F(Subkeys[2 * i + 1], Subkeys[2 * i], C[8 * i]);
                 for (int j = 1; j < 8; j++)
                 {
-                    data = F(data[1], data[0], c[8 * i + j]);
+                    data = F(data[1], data[0], C[8 * i + j]);
                 }
-                subkeys[2 * i + 2] = data[0];
-                subkeys[2 * i + 3] = data[1];
+                Subkeys[2 * i + 2] = data[0];
+                Subkeys[2 * i + 3] = data[1];
             }
         }
+        /// <summary>
+        /// Encrypt one 16-byte block of data.
+        /// </summary>
+        /// <param name="state">16-byte block of plaintext.</param>
+        /// <returns>16-byte block of ciphertext.</returns>
         public byte[] EncryptBlock(byte[] state)
         {
             byte[] ciphertext = state.ToArray();
             for (int i = 0; i < 9; i++)
             {
-                ciphertext = L(S(X(ciphertext, subkeys[i])));
+                ciphertext = L(S(X(ciphertext, Subkeys[i])));
             }
-            ciphertext = X(ciphertext, subkeys[9]);
+            ciphertext = X(ciphertext, Subkeys[9]);
             return ciphertext;
         }
+        /// <summary>
+        /// Decrypt one 16-byte block of data.
+        /// </summary>
+        /// <param name="state">16-byte block of ciphertext.</param>
+        /// <returns>16-byte block of plaintext.</returns>
         public byte[] DecryptBlock(byte[] state)
         {
             byte[] plaintext = state.ToArray();
-            plaintext = X(plaintext, subkeys[9]);
+            plaintext = X(plaintext, Subkeys[9]);
             for (int i = 8; i >= 0; i--)
             {
-                plaintext = X(S_inv(L_inv(plaintext)), subkeys[i]);
+                plaintext = X(S_inv(L_inv(plaintext)), Subkeys[i]);
             }
             return plaintext;
         }
