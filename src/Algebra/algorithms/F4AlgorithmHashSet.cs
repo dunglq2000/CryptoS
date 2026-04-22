@@ -1,4 +1,4 @@
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Faugère's F4 algorithm for calculating Groeber's basis.

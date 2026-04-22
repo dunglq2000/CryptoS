@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Monomial over Boolean polynomial ring, i.e. $\mathbb{F}_2[x_1, x_2, \ldots, x_n] / \langle x_1^2 + x_1, x_2^2 + x_2, \ldots, x_n^2 + x_n \rangle$.

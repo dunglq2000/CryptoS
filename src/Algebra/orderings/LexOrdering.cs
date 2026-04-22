@@ -1,4 +1,4 @@
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Lexicographic ord

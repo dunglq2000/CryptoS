@@ -1,4 +1,4 @@
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Buchberger's algorithm for calculating Groeber's basis.

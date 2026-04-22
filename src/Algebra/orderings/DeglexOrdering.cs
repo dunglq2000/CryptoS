@@ -1,4 +1,4 @@
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Graded-lexicographic order.

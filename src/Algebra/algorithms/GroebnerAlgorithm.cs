@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Algorithm for calculating Groebner's basis.

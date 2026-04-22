@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Abstract matrix over $\mathbb{F}_2$ with implementation for row-reduced echelon form.

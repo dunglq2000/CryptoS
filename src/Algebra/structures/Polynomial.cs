@@ -1,7 +1,6 @@
-using System.Linq.Expressions;
 using System.Text;
 
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// Class for polynomial over Boolean polynomial ring.

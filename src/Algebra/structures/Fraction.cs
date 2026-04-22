@@ -1,4 +1,4 @@
-namespace Algebra
+namespace CryptoS.Algebra
 {
     /// <summary>
     /// Fraction class.

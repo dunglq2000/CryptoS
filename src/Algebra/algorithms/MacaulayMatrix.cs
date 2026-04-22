@@ -1,4 +1,4 @@
-namespace Algebra.Boolean;
+namespace CryptoS.Algebra.Boolean;
 
 /// <summary>
 /// MacaulayMatrix of a set of polynomials.

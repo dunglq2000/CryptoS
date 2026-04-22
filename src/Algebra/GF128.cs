@@ -1,18 +1,18 @@
 ﻿using System.Text;
 
-namespace Algebra;
+namespace CryptoS.Algebra;
 
 /// <summary>
-/// Class for finite field $\FF_{2^7}$ with modulus $x^{128} + x^7 + x^2 + x + 1$.
+/// Class for finite field $\mathbb{F}_{2^{128}}$ with modulus $x^{128} + x^7 + x^2 + x + 1$.
 /// </summary>
 public class GF128
 {
     /// <summary>
-    /// Represent element in $\FF_{2^7}$.
+    /// Represent element in $\mathbb{F}_{2^{128}}$.
     /// </summary>
     public byte[] data = new byte[16];
     /// <summary>
-    /// Zero element in $\FF_{2^7}$.
+    /// Zero element in $\mathbb{F}_{2^{128}}$.
     /// </summary>
     public GF128()
     {
@@ -20,7 +20,7 @@ public class GF128
             data[i] = 0;
     }
     /// <summary>
-    /// Constructor for element in $\FF_{2^7}$.
+    /// Constructor for element in $\mathbb{F}_{2^{128}}$.
     /// </summary>
     /// <param name="data"></param>
     public GF128(byte[] data)
@@ -38,7 +38,7 @@ public class GF128
             data[i] = other.data[i];
     }
     /// <summary>
-    /// Addition of two elements on $\FF_{2^7}$.
+    /// Addition of two elements on $\mathbb{F}_{2^{128}}$.
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
@@ -51,7 +51,7 @@ public class GF128
         return result;
     }
     /// <summary>
-    /// Multiplication of two elements on $\FF_{2^7}$.
+    /// Multiplication of two elements on $\mathbb{F}_{2^{128}}$.
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
@@ -102,7 +102,7 @@ public class GF128
         return flag;
     }
     /// <summary>
-    /// Convert element on $\FF_{2^7}$ to string.
+    /// Convert element on $\mathbb{F}_{2^{128}}$ to string.
     /// </summary>
     /// <returns></returns>
     public override string ToString()
@@ -113,7 +113,7 @@ public class GF128
         return stringBuilder.ToString();
     }
     /// <summary>
-    /// Double element on $\FF_{2^7}$.
+    /// Double element on $\mathbb{F}_{2^{128}}$.
     /// </summary>
     /// <param name="a"></param>
     /// <returns></returns>
