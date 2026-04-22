@@ -134,3 +134,8 @@ _NCrunch*
 
 .vscode
 main/
+
+docs/html/
+docs/latex/
+docs/_site/
+docs/api/
