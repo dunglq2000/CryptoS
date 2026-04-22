@@ -1,20 +1,35 @@
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Algebra;
+namespace Algebra.Boolean;
 
 /// <summary>
 /// Class for polynomial over Boolean polynomial ring.
 /// </summary>
 public class Polynomial
 {
+    /// <summary>
+    /// List of monomials in polynomial.
+    /// </summary>
     public List<Monomial> Monomials { get; set; }
+    /// <summary>
+    /// Monomial ordering in polynomial.
+    /// </summary>
     public readonly MonomialOrdering Order;
+    /// <summary>
+    /// Constructor of zero polynomial with monomial ordering.
+    /// </summary>
+    /// <param name="monomialOrdering">Monomial ordering.</param>
     public Polynomial(MonomialOrdering monomialOrdering)
     {
         Order = monomialOrdering;
         Monomials = new List<Monomial>();
     }
+    /// <summary>
+    /// Constructor for polynomial with monomial ordering.
+    /// </summary>
+    /// <param name="monomialOrdering">Monomial ordering.</param>
+    /// <param name="monomials">List of monomials.</param>
     public Polynomial(MonomialOrdering monomialOrdering, List<Monomial> monomials)
     {
         Order = monomialOrdering;
@@ -24,6 +39,12 @@ public class Polynomial
             Add(monomial);
         }
     }
+    /// <summary>
+    /// Constructor for parsing polynomial from string.
+    /// </summary>
+    /// <param name="bitCount">Number of variables.</param>
+    /// <param name="polynomialString">String to be parse.</param>
+    /// <param name="monomialOrdering">Monomial ordering.</param>
     public Polynomial(int bitCount, string polynomialString, MonomialOrdering monomialOrdering)
     {
         Order = monomialOrdering;
@@ -47,7 +68,7 @@ public class Polynomial
     /// </summary>
     /// <param name="polynomial">Polynomial on the left-hand side of + symbol</param>
     /// <param name="monomial">Monomial on the right-hand side of + symbol</param>
-    /// <returns>New polynomial which is the result of <c>polynomial + monomial</c></returns>
+    /// <returns>New polynomial which is the result of <paramref name="polynomial"/>+<paramref name="monomial"/>.</returns>
     public static Polynomial operator+(Polynomial polynomial, Monomial monomial)
     {
         MonomialOrdering monomialOrdering = polynomial.Order;
@@ -64,6 +85,12 @@ public class Polynomial
         }
         return new Polynomial(monomialOrdering, monomials);
     }
+    /// <summary>
+    /// Operator for adding two polynomials.
+    /// </summary>
+    /// <param name="left">Polynomial before +.</param>
+    /// <param name="right">Polynomial after +.</param>
+    /// <returns>New polynomial which is the result of <paramref name="left"/>+<paramref name="right"/>.</returns>
     public static Polynomial operator+(Polynomial left, Polynomial right)
     {
         List<Monomial> monomials = left.Monomials.Concat(right.Monomials).ToList();
@@ -98,6 +125,10 @@ public class Polynomial
             Monomials.Remove(monomial);
         }
     }
+    /// <summary>
+    /// Add a polynomial to this polynomial.
+    /// </summary>
+    /// <param name="polynomial">Other polynomial.</param>
     public void Add(Polynomial polynomial)
     {
         foreach (var monomial in polynomial.Monomials)
@@ -118,6 +149,11 @@ public class Polynomial
             Add(mono);
         }
     }
+    /// <summary>
+    /// Calculate $S$-poly of two polynomials.
+    /// </summary>
+    /// <param name="other">Other polynomial.</param>
+    /// <returns>$S$-poly of this and <paramref name="other"/> polynomials.</returns>
     public Polynomial SPoly(Polynomial other)
     {
         Monomial leadThis = GetLeadingTerm();
@@ -126,6 +162,12 @@ public class Polynomial
         Polynomial result = this * (lcm / leadThis) + other * (lcm / leadOther);
         return result;
     }
+    /// <summary>
+    /// Calculate $S$-poly of two polynomials.
+    /// </summary>
+    /// <param name="left">First polynomial.</param>
+    /// <param name="right">Second polynomial.</param>
+    /// <returns>$S$-poly of polynomials <paramref name="left"/> and <paramref name="right"/>.</returns>
     public static Polynomial SPoly(Polynomial left, Polynomial right)
     {
         Monomial leadLeft = left.GetLeadingTerm();
@@ -134,6 +176,17 @@ public class Polynomial
         Polynomial result = left * (lcm / leadLeft) + right * (lcm / leadRight);
         return result;
     }
+    /// <summary>
+    /// Divide this polynomial with a list of polynomials.
+    /// </summary>
+    /// <param name="polynomials">List of polynomials.</param>
+    /// <returns>Remainder and quotients.</returns>
+    /// <exception cref="ArgumentException">List of polynomials must be not empty.</exception>
+    /// <remarks>
+    /// If this polynomial is $f$ and <paramref name="polynomials"/> is a list of polynomials $g_1$, $g_2$, ..., $g_t$,
+    /// this function returns a polynomial $r$ and a list of polynomials $q_1$, $q_2$, ..., $q_t$ such that
+    /// $f = r + g_1 q_1 + g_2 q_2 + \cdots + g_t q_t$, where $r$ is the remainder.
+    /// </remarks>
     public Tuple<Polynomial, List<Polynomial>> Divide(List<Polynomial> polynomials)
     {
         if (polynomials.Count < 1)
@@ -168,6 +221,11 @@ public class Polynomial
         }
         return new Tuple<Polynomial, List<Polynomial>>(r, q);
     }
+    /// <summary>
+    /// Get leading term of polynomial according to monomial ordering <see cref="Order"/>.
+    /// </summary>
+    /// <returns>Leading term of polynomial.</returns>
+    /// <exception cref="ArgumentException">Polynomial must not be zero.</exception>
     public Monomial GetLeadingTerm()
     {
         if (Monomials.Count == 0)
@@ -179,6 +237,11 @@ public class Polynomial
             return Monomials[Monomials.Count - 1]; // get last elements
         }
     }
+    /// <summary>
+    /// Verify equality of two polynomials.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool Equals(Polynomial other)
     {
         if (Monomials.Count != other.Monomials.Count)
@@ -194,6 +257,11 @@ public class Polynomial
         }
         return true;
     }
+    /// <summary>
+    /// Verify equality of two polynomials.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public override bool Equals(object? obj)
     {
         if (obj == null)
@@ -214,6 +282,19 @@ public class Polynomial
         }
         return true;
     }
+    /// <summary>
+    /// Get hash value for polynomial.
+    /// </summary>
+    /// <returns>Hash value for polynomial.</returns>
+    /// <remarks>
+    /// If this polynomial is $f = m_0 + m_1 + \cdots + m_t$, where $m_i$ are monomials 
+    /// sorted by monomial ordering <see cref="Order"/> ascending, let the hash value 
+    /// of monomial $m_i$ is $H(m_i)$, then the hash value of polynomial is
+    /// 
+    /// $$H(f) = H(m_0) + 2 \cdot H(m_1) + 2^2 H(m_2) + \cdots + 2^t H(m_t) \bmod{1069482893},$$
+    /// 
+    /// with $1069482893$ is 30-bit prime.
+    /// </remarks>
     public override int GetHashCode()
     {
         int modulus = 1069482893;
@@ -224,6 +305,10 @@ public class Polynomial
         }
         return result;
     }
+    /// <summary>
+    /// Output polynomial as vectors of its monomials.
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
         StringBuilder result = new StringBuilder();

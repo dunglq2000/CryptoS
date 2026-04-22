@@ -1,12 +1,17 @@
-using System.Numerics;
-using System.Text;
-namespace Algebra;
+namespace Algebra.Boolean;
 
+/// <summary>
+/// MacaulayMatrix of a set of polynomials.
+/// </summary>
 public class MacaulayMatrix : AbstractMatrix
 {
     private readonly uint[] _nullRow;
     private readonly List<Monomial> _monomials;
     private readonly MonomialOrdering _monomialOrdering;
+    /// <summary>
+    /// Constructor with list of polynomials.
+    /// </summary>
+    /// <param name="polynomials">List of polynomials</param>
     public MacaulayMatrix(List<Polynomial> polynomials)
     {
         _monomialOrdering = polynomials[0].Order;
@@ -35,6 +40,10 @@ public class MacaulayMatrix : AbstractMatrix
             }
         }
     }
+    /// <summary>
+    /// Get polynomials from current Macaulay matrix.
+    /// </summary>
+    /// <returns>List of polynomials from current Macaulay matrix.</returns>
     public List<Polynomial> GetPolynomials()
     {
         List<Polynomial> result = new List<Polynomial>();

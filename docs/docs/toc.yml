@@ -2,3 +2,10 @@
   href: introduction.md
 - name: Getting Started
   href: getting-started.md
+- name: Sudoku
+  href: sudoku.md
+- name: GOST cryptography
+  href: gost-crypto.md
+- name: Commutative algebra
+  href: commutative-algebra.md
+  

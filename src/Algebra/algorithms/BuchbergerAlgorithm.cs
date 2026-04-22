@@ -1,10 +1,18 @@
-namespace Algebra;
+namespace Algebra.Boolean;
 
+/// <summary>
+/// Buchberger's algorithm for calculating Groeber's basis.
+/// </summary>
 public class BuchbergerAlgorithm: GroebnerAlgorithm
 {
     private List<Tuple<int, int>> _pairs = new List<Tuple<int, int>>();
     private List<Tuple<int, int>> _selectedPairs = new List<Tuple<int, int>>();
     private List<Polynomial> _polynomials = new List<Polynomial>();
+    /// <summary>
+    /// Calculate Groebner's basis.
+    /// </summary>
+    /// <param name="polynomials">List of polynomials for calculating Groebner's basis.</param>
+    /// <returns>New list of polynomials, which is Groebner's basis of input polynomials.</returns>
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
         _polynomials.AddRange(polynomials);
@@ -38,6 +46,12 @@ public class BuchbergerAlgorithm: GroebnerAlgorithm
         }
         return _polynomials;
     }
+    /// <summary>
+    /// Select critical pairs of polynomials, used in Groebner's basis calculation.
+    /// </summary>
+    /// <remarks>
+    /// In this naive implementation only choose first pair.
+    /// </remarks>
     public override void Select()
     {
         _selectedPairs.Clear();

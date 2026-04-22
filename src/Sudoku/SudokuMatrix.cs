@@ -38,6 +38,9 @@ public class SudokuMatrix
     /// The number of rows/columns, which equals <c>N * N</c>.
     /// </summary>
     public readonly int Size;
+    /// <summary>
+    /// Represent sudoku's grid as matrix.
+    /// </summary>
     public int[] Matrix;
     private int[] Result;
     /// <summary>
@@ -83,6 +86,10 @@ public class SudokuMatrix
             }
         }
     }
+    /// <summary>
+    /// Print Sudoku's grid as matrix from <see cref="Matrix"/> .
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
         // if (Size < 10)

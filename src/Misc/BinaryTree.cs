@@ -1,16 +1,39 @@
 namespace Misc;
 
+/// <summary>
+/// Binary search tree.
+/// </summary>
+/// <typeparam name="T">Data in each node.</typeparam>
 public class BinaryTree<T>
 {
+    /// <summary>
+    /// Traversal binary search tree.
+    /// </summary>
     public enum TraversalType
     {
+        /// <summary>
+        /// Traversal by PreOrder: left node => current node => right node.
+        /// </summary>
         PreOrder,
+        /// <summary>
+        /// Traversal by InOrder: current node => left node => right node.
+        /// </summary>
         InOrder,
+        /// <summary>
+        /// Traversal by PostOrder: left node => right node => current node.
+        /// </summary>
         PostOrder
     }
+    /// <summary>
+    /// Root node of the tree.
+    /// </summary>
     public BinaryNode<T>? _root;
     private List<T> _paths;
     private readonly IComparer<T> _comparer;
+    /// <summary>
+    /// Constructor of binary search tree with a comparer for comparing data in nodes.
+    /// </summary>
+    /// <param name="comparer"></param>
     public BinaryTree(IComparer<T>? comparer = null)
     {
         _root = null;

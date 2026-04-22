@@ -1,7 +1,6 @@
-﻿using Crypto;
-using System.Text;
+﻿using System.Text;
 
-namespace KuznyechikTests
+namespace Crypto.GostCrypto.Tests
 {
     [TestClass]
     public class KuznyechikTests
@@ -183,9 +182,9 @@ namespace KuznyechikTests
                 "bb44e25378c73123a5f32f73cdb6e517",
                 "72e9dd7416bcf45b755dbaa88e4a4043"
             ];
-            for (int i = 0; i < kuznyechik.subkeys.Length; i++)
+            for (int i = 0; i < kuznyechik.Subkeys.Length; i++)
             {
-                Assert.AreEqual(ToHex(kuznyechik.subkeys[i]), subkeys[i]);
+                Assert.AreEqual(ToHex(kuznyechik.Subkeys[i]), subkeys[i]);
             }
         }
         [TestMethod]
@@ -205,7 +204,7 @@ namespace KuznyechikTests
             Kuznyechik.Constants();
             for (int i = 0; i < constants.Length; i++)
             {
-                Assert.AreEqual(ToHex(Kuznyechik.c[i]), constants[i]);
+                Assert.AreEqual(ToHex(Kuznyechik.C[i]), constants[i]);
             }
         }
         [TestMethod]

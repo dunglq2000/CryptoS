@@ -1,12 +1,30 @@
 using System.Text;
 
-namespace Algebra;
+namespace Algebra.Boolean;
 
+/// <summary>
+/// Abstract matrix over $\mathbb{F}_2$ with implementation for row-reduced echelon form.
+/// </summary>
+/// <remarks>
+/// Matrix uses bit-packed technique for $\mathbb{F}_2$. Matrix with $n$ rows and $m$ columns consumes $\lceil nm/32 \rceil$ integers.
+/// </remarks>
 public class AbstractMatrix
 {
+    /// <summary>
+    /// Array for representing matrix.
+    /// </summary>
     public uint[] Matrix { get; set; }
+    /// <summary>
+    /// Number of rows of matrix.
+    /// </summary>
     protected int _nrows;
+    /// <summary>
+    /// Number of columns of matrix.
+    /// </summary>
     protected int _ncols;
+    /// <summary>
+    /// Default constructor for matrix with 1 row and 1 column.
+    /// </summary>
     public AbstractMatrix()
     {
         _nrows = 1;
@@ -14,6 +32,12 @@ public class AbstractMatrix
         int ndwords = (_ncols + 31) >> 5;
         Matrix = new uint[_nrows * ndwords];
     }
+    /// <summary>
+    /// Constructor for matrix in row-major.
+    /// </summary>
+    /// <param name="matrix">Matrix in row-major.</param>
+    /// <param name="nrows">Number of rows.</param>
+    /// <param name="ncols">Number of columns.</param>
     public AbstractMatrix(uint[] matrix, int nrows, int ncols)
     {
         _nrows = nrows;
@@ -22,6 +46,9 @@ public class AbstractMatrix
         Matrix = new uint[nrows * ndwords];
         matrix.CopyTo(Matrix);
     }
+    /// <summary>
+    /// Calculate row-reduced echelon form of current matrix.
+    /// </summary>
     public void Reduce()
     {
         int pivotRow = 0;
@@ -70,6 +97,10 @@ public class AbstractMatrix
             pivotRow += 1;
         }
     }
+    /// <summary>
+    /// Print matrix on $\mathbb{F}_2$.
+    /// </summary>
+    /// <returns>String representing matrix on $\mathbb{F}_2$.</returns>
     public override string ToString()
     {
         StringBuilder result_string_builder = new StringBuilder();

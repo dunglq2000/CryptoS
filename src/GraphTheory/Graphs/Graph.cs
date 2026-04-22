@@ -35,7 +35,20 @@ public abstract class Graph
     /// Adjacency list for graph (has not been used in graph traversal).
     /// </summary>
     public List<HashSet<int>> AdjacencyMatrix;
+    /// <summary>
+    /// Dictionary for design pattern "strategy", specifying algorithm for graph traversal by enum <see cref="TraversingAlgorithm" />.
+    /// </summary>
     protected Dictionary<TraversingAlgorithm, Traversal.GraphTraversal> _algorithmTraversal;
+    /// <summary>
+    /// Constructor cho đồ thị vô hướng.
+    /// </summary>
+    /// <param name="edges">Danh sách cạnh của đồ thị vô hướng.</param>
+    /// <param name="numberOfVertices">Số lượng đỉnh của đồ thị.</param>
+    /// <remarks>
+    /// <para>Đối với đồ thị vô hướng, nếu đồ thị có cạnh <c>(u, v)</c> thì cũng có cạnh <c>(v, u)</c>. Do đó chỉ cần truyền một trong hai cạnh.</para>
+    /// <para>Đỉnh của đồ thị được đánh số từ 0 tới <paramref name="numberOfVertices"/> - 1.</para>
+    /// <para>Nếu <paramref name="numberOfVertices"/> không được chỉ định thì dựa trên index cao nhất của đỉnh để xác định đỉnh.</para>
+    /// </remarks>
     public Graph(List<(int, int)> edges, int numberOfVertices = 0)
     {
         if (numberOfVertices == 0)
@@ -84,10 +97,15 @@ public abstract class Graph
     /// <summary>
     /// Find path from vertex <paramref name="start"/> to vertex <paramref name="end"/> using algorithm in <paramref name="algorithm"/>.
     /// </summary>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
-    /// <param name="algorithm"></param>
-    /// <returns></returns>
+    /// <param name="start">Starting vertex.</param>
+    /// <param name="end">Ending vertex.</param>
+    /// <param name="algorithm">Algorithm for traversing graph.</param>
+    /// <returns>A list contains the path from starting vertex <paramref name="start"/> to ending vertex <paramref name="end"/>. Returns null if such path cannot be found.</returns>
     public abstract List<int>? FindPath(int start, int end, TraversingAlgorithm algorithm = TraversingAlgorithm.DFSRecurse);
+    /// <summary>
+    /// Find connected components of the undirected graph.
+    /// </summary>
+    /// <param name="algorithm">Algorithm for traversing graph.</param>
+    /// <returns>A list of lists, each list contains all vertices lies in the same connected component.</returns>
     public abstract List<List<int>> GetConnectedComponents(TraversingAlgorithm algorithm = TraversingAlgorithm.DFSRecurse);
 }

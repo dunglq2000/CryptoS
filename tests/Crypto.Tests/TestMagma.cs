@@ -1,4 +1,4 @@
-namespace Crypto.Tests
+namespace Crypto.GostCrypto.Tests
 {
     [TestClass]
     public class TestMagma
@@ -20,7 +20,7 @@ namespace Crypto.Tests
                 ];
             for (int i = 0; i < input.Length;i++)
             {
-                Assert.AreEqual(HexToUInt(output[i]), Magma.t(HexToUInt(input[i])));
+                Assert.AreEqual(HexToUInt(output[i]), Magma.T(HexToUInt(input[i])));
             }
         }
         [TestMethod]
@@ -38,7 +38,7 @@ namespace Crypto.Tests
             {
                 uint key = Convert.ToUInt32(input[i][0], 16);
                 uint right = Convert.ToUInt32(input[i][1], 16);
-                uint result = Magma.rot11(Magma.t(Magma.plus32(key, right)));
+                uint result = Magma.Rot11(Magma.T(Magma.Add32(key, right)));
                 Assert.AreEqual(HexToUInt(output[i]), result);
             }
         }
@@ -54,7 +54,7 @@ namespace Crypto.Tests
                 ];
             for (int i = 0; i <  output.Length; i++)
             {
-                Assert.AreEqual(HexToUInt(output[i]), magma.subkeys[i]);
+                Assert.AreEqual(HexToUInt(output[i]), magma.Subkeys[i]);
             }
         }
         [TestMethod]
@@ -84,15 +84,15 @@ namespace Crypto.Tests
                 ];
             for (int i = 0; i < 24; i++)
             {
-                Assert.AreEqual(Convert.ToUInt64(output[i], 16), Magma.round(plaintext, magma.subkeys[i % 8]));
+                Assert.AreEqual(Convert.ToUInt64(output[i], 16), Magma.Round(plaintext, magma.Subkeys[i % 8]));
                 plaintext = Convert.ToUInt64(output[i], 16);
             }
             for (int i = 24; i < 31; i++)
             {
-                Assert.AreEqual(Convert.ToUInt64(output[i], 16), Magma.round(plaintext, magma.subkeys[7 - (i % 8)]));
+                Assert.AreEqual(Convert.ToUInt64(output[i], 16), Magma.Round(plaintext, magma.Subkeys[7 - (i % 8)]));
                 plaintext = Convert.ToUInt64(output[i], 16);
             }
-            ulong tmp = Magma.round(plaintext, magma.subkeys[0]);
+            ulong tmp = Magma.Round(plaintext, magma.Subkeys[0]);
             Assert.AreEqual(Convert.ToUInt64(output[31], 16), (tmp << 32) | (tmp >> 32));
         }
     }

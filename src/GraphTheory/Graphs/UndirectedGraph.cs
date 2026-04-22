@@ -16,19 +16,19 @@ public class UndirectedGraph : Graph
     /// <para>Đỉnh của đồ thị được đánh số từ 0 tới <paramref name="numberOfVertices"/> - 1.</para>
     /// <para>Nếu <paramref name="numberOfVertices"/> không được chỉ định thì dựa trên index cao nhất của đỉnh để xác định đỉnh.</para>
     /// </remarks>
+    /// <example>
+    /// Để tạo đồ thị cần danh sách các cạnh dưới dạng <c>List&lt;(int, int)&gt;</c>:
+    /// <code>
+    /// using GraphTheory;
+    /// Graph graph = new UndirectedGraph(
+    ///     new List&lt;(int, int)&gt;{
+    ///         (0, 1), (1, 2), (2, 3)
+    ///     }, 6
+    /// );
+    /// </code>
+    /// </example>
     public UndirectedGraph(List<(int, int)> edges, int numberOfVertices = 0) : base(edges, numberOfVertices)
     {
-        /// <example>
-        /// Để tạo đồ thị cần danh sách các cạnh dưới dạng <c>List<(int, int)></c>:
-        /// <code>
-        /// using GraphTheory;
-        /// Graph graph = new UndirectedGraph(
-        ///     new List<(int, int)>{
-        ///         (0, 1), (1, 2), (2, 3)
-        ///     }, 6
-        /// );
-        /// </code>
-        /// </example>
         foreach (var edge in edges)
         {
             Matrix[edge.Item1 * NumberOfVertices + edge.Item2] = 1;
@@ -40,6 +40,11 @@ public class UndirectedGraph : Graph
             AdjacencyMatrix[edge.Item2].Add(edge.Item1);
         }
     }
+    /// <summary>
+    /// Generate spanning tree of graph.
+    /// </summary>
+    /// <param name="u">Current vertex.</param>
+    /// <returns>New graph which is spanning tree for this graph.</returns>
     public UndirectedGraph? GetSpanningTree(int u)
     {
         bool[] seen = new bool[NumberOfVertices];
@@ -80,22 +85,22 @@ public class UndirectedGraph : Graph
     /// <param name="algorithm">Algorithm for traversing graph.</param>
     /// <returns>A list contains the path from starting vertex <paramref name="start"/> to ending vertex <paramref name="end"/>. Returns null if such path cannot be found.</returns>
     /// <exception cref="ArgumentException">Algorithm for traversing graph is not implemented.</exception>
+    /// <example>
+    /// Ví dụ
+    /// <code>
+    /// Graph graph = new UndirectedGraph(
+    ///     new List&lt;(int, int)&gt;
+    ///     {
+    ///         (0, 1), (1, 2), (2, 3), (4, 5)
+    ///     }, 6
+    /// );
+    /// List&lt;int&gt;? paths = graph.FindPath(0, 3, Graph.TraversingAlgorithm.DFSRecurse);
+    /// bool result = paths is not null &amp;&amp; paths.SequenceEqual([0, 1, 2, 3]);
+    /// </code>
+    /// trả về true vì có đường đi từ đỉnh 0 tới đỉnh 3 là 0 -> 1 -> 2 -> 3.
+    /// </example>
     public override List<int>? FindPath(int start, int end, TraversingAlgorithm algorithm)
     {
-        /// <example>
-        /// Ví dụ
-        /// <code>
-        /// Graph graph = new UndirectedGraph(
-        ///     new List<(int, int)>
-        ///     {
-        ///         (0, 1), (1, 2), (2, 3), (4, 5)
-        ///     }, 6
-        /// );
-        /// List<int>? paths = graph.FindPath(0, 3, Graph.TraversingAlgorithm.DFSRecurse);
-        /// bool result = paths is not null && paths.SequenceEqual([0, 1, 2, 3]);
-        /// </code>
-        /// trả về true vì có đường đi từ đỉnh 0 tới đỉnh 3 là 0 -> 1 -> 2 -> 3.
-        /// </example>
         if (_algorithmTraversal.ContainsKey(algorithm) == false)
         {
             throw new ArgumentException("Algorithm not implemented.");

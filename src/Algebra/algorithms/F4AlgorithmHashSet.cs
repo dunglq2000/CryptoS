@@ -1,11 +1,22 @@
-namespace Algebra;
+namespace Algebra.Boolean;
 
+/// <summary>
+/// Faugère's F4 algorithm for calculating Groeber's basis.
+/// </summary>
+/// <remarks>
+/// This implementation uses HashSet for managing critical pairs.
+/// </remarks>
 public class F4AlgorithmHashSet : GroebnerAlgorithm
 {
     private HashSet<Tuple<int, int>> _pairs = new HashSet<Tuple<int, int>>();
     private HashSet<Tuple<int, int>> _selectedPairs = new HashSet<Tuple<int, int>>();
     private List<Polynomial> _polynomials = new List<Polynomial>();
     private MonomialOrdering? _monomialOrdering = null;
+    /// <summary>
+    /// Calculate Groebner's basis.
+    /// </summary>
+    /// <param name="polynomials">List of polynomials for calculating Groebner's basis.</param>
+    /// <returns>New list of polynomials, which is Groebner's basis of input polynomials.</returns>
     public override List<Polynomial> Compute(List<Polynomial> polynomials)
     {
         _monomialOrdering = polynomials[0].Order;
@@ -35,6 +46,9 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         }
         return _polynomials;
     }
+    /// <summary>
+    /// Select critical pairs of polynomials, used in Groebner's basis calculation.
+    /// </summary>
     public override void Select()
     {
         _selectedPairs.Clear();
@@ -55,6 +69,10 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
             }
         }
     }
+    /// <summary>
+    /// Reduction step in F4 algorithm.
+    /// </summary>
+    /// <returns></returns>
     private List<Polynomial> Reduction()
     {
         HashSet<Polynomial> L = SymbolicPreprocessing();
@@ -82,6 +100,10 @@ public class F4AlgorithmHashSet : GroebnerAlgorithm
         }
         return G_;
     }
+    /// <summary>
+    /// Symbolic preprocessing step in F4 algorithm.
+    /// </summary>
+    /// <returns></returns>
     private HashSet<Polynomial> SymbolicPreprocessing()
     {
         HashSet<Polynomial> L = new HashSet<Polynomial>();
