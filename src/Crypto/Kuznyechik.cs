@@ -1,4 +1,4 @@
-﻿namespace Crypto.GostCrypto
+﻿namespace CryptoS.Crypto.GostCrypto
 {
     /// <summary>
     /// Kuznyechik block cipher.

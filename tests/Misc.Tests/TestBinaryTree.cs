@@ -1,4 +1,4 @@
-﻿namespace Misc.Tests;
+﻿namespace CryptoS.Misc.Tests;
 
 [TestClass]
 public class TestBinaryTreen

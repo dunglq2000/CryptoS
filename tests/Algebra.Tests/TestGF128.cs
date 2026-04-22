@@ -1,4 +1,4 @@
-﻿namespace Algebra.Tests;
+﻿namespace CryptoS.Algebra.Tests;
 
 [TestClass]
 public sealed class GF128Tests

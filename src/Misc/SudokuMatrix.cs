@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Misc.Sudoku;
+namespace CryptoS.Misc.Sudoku;
 
 /// <summary>
 /// Class for representation standard Sudoku's matrix and solve it.

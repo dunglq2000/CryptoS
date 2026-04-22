@@ -1,14 +1,30 @@
-namespace GraphTheory.Traversal;
+namespace CryptoS.GraphTheory.Traversal;
 
 /// <summary>
 /// Abstract class for algorithms traversing graph.
 /// </summary>
 public abstract class GraphTraversal
 {
+    /// <summary>
+    /// Mark if vertex has been visited or not.
+    /// </summary>
     protected bool[] _isVisited;
+    /// <summary>
+    /// Trace the vertex before current vertex on traversing path.
+    /// </summary>
     protected int[] _trace;
+    /// <summary>
+    /// Graph which is traversed.
+    /// </summary>
     protected readonly Graph _graph;
+    /// <summary>
+    /// Save vertices on current connected component on traversing path.
+    /// </summary>
     protected List<int> _currentConnectedComponent;
+    /// <summary>
+    /// Constructor for traversing path.
+    /// </summary>
+    /// <param name="graph"></param>
     public GraphTraversal(Graph graph)
     {
         _graph = graph;
@@ -17,6 +33,10 @@ public abstract class GraphTraversal
         Array.Fill(_trace, -1);
         _currentConnectedComponent = new List<int>();
     }
+    /// <summary>
+    /// Traverse the node <paramref name="u"/>.
+    /// </summary>
+    /// <param name="u"></param>
     public abstract void Traverse(int u);
     /// <summary>
     /// Get path from vertex <c>start</c> to vertex <c>end</c>.
@@ -51,6 +71,10 @@ public abstract class GraphTraversal
         paths.Reverse();
         return paths;
     }
+    /// <summary>
+    /// Get all connected components of the graph.
+    /// </summary>
+    /// <returns>A list of lists, each list contains all vertices lying in the same connected component.</returns>
     public List<List<int>> GetConnectedComponents()
     {
         List<List<int>> connectedComponents = new List<List<int>>();

@@ -1,4 +1,4 @@
-namespace GraphTheory.Traversal.ConnectedComponents;
+namespace CryptoS.GraphTheory.Traversal.ConnectedComponents;
 
 /// <summary>
 /// Strong connected components for directed graph.

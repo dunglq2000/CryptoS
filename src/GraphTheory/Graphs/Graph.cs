@@ -1,4 +1,4 @@
-namespace GraphTheory;
+namespace CryptoS.GraphTheory;
 
 /// <summary>
 /// Abstract class for graph.

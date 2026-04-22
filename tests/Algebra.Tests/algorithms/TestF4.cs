@@ -1,6 +1,4 @@
-using Algebra;
-
-namespace Algebra.Tests;
+namespace CryptoS.Algebra.Boolean.Tests;
 
 [TestClass]
 public class TestF4

@@ -1,10 +1,14 @@
-namespace GraphTheory.Traversal;
+namespace CryptoS.GraphTheory.Traversal;
 
 /// <summary>
 /// Class for traversing graph with BFS algorithm.
 /// </summary>
 public class GraphBFS : GraphTraversal
 {
+    /// <summary>
+    /// Constructor for traversing through graph.
+    /// </summary>
+    /// <param name="graph"></param>
     public GraphBFS(Graph graph) : base(graph)
     {
         

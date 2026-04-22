@@ -1,4 +1,4 @@
-namespace Crypto.GostCrypto.Tests
+namespace CryptoS.Crypto.GostCrypto.Tests
 {
     [TestClass]
     public class TestMagma

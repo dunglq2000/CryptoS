@@ -1,4 +1,4 @@
-namespace GraphTheory.Traversal.Tests;
+namespace CryptoS.GraphTheory.Traversal.Tests;
 
 [TestClass]
 public class TestGraphFindPath

@@ -1,4 +1,4 @@
-namespace Misc;
+namespace CryptoS.Misc;
 
 /// <summary>
 /// Binary search tree.

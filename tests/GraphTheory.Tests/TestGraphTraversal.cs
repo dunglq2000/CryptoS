@@ -1,5 +1,4 @@
-﻿namespace GraphTheory.Traversal.Tests;
-using GraphTheory.Traversal;
+﻿namespace CryptoS.GraphTheory.Traversal.Tests;
 
 [TestClass]
 public class TestGraphTraversal

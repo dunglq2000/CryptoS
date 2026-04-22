@@ -1,6 +1,4 @@
-using GraphTheory.Traversal.ConnectedComponents;
-
-namespace GraphTheory.Traversal.Tests;
+namespace CryptoS.GraphTheory.Traversal.Tests;
 
 [TestClass]
 public class TestGraphConnectedComponents

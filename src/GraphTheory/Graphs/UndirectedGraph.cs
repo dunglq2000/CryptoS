@@ -1,5 +1,5 @@
 using System.Text;
-namespace GraphTheory;
+namespace CryptoS.GraphTheory;
 
 /// <summary>
 /// Để khởi tạo đồ thị (vô hướng) chương trình hiện tại cung cấp constructor:

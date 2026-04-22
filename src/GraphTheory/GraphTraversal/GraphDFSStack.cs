@@ -1,10 +1,14 @@
-namespace GraphTheory.Traversal;
+namespace CryptoS.GraphTheory.Traversal;
 
 /// <summary>
 /// Class for traversing graph with DFS algorithm using stack.
 /// </summary>
 public class GraphDFSStack : GraphTraversal
 {
+    /// <summary>
+    /// Constructor for traversing through graph.
+    /// </summary>
+    /// <param name="graph"></param>
     public GraphDFSStack(Graph graph) : base(graph)
     {
         
