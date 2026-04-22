@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="src/Sudoku/Sudoku.csproj" />
   <Project Path="src/Crypto/Crypto.csproj" />
   <Project Path="tests/Crypto.Tests/Crypto.Tests.csproj" />
   <Project Path="src/GraphTheory/GraphTheory.csproj" />

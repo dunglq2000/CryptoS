@@ -1,8 +1,6 @@
-﻿using System.Drawing;
-using System.Numerics;
-using System.Text;
+﻿using System.Text;
 
-namespace Sudoku;
+namespace Misc.Sudoku;
 
 /// <summary>
 /// Class for representation standard Sudoku's matrix and solve it.

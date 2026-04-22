@@ -1,14 +1,39 @@
 namespace GraphTheory.Traversal.ConnectedComponents;
 
+/// <summary>
+/// Strong connected components for directed graph.
+/// </summary>
 public abstract class GraphStrongConnectedComponents : GraphTraversal
 {
+    /// <summary>
+    /// Temporary variables for Tarjan algorithm.
+    /// </summary>
     protected int[] _number;
+    /// <summary>
+    /// Temporary variable for counting the number of strong connected components.
+    /// </summary>
     protected int _cnt;
+    /// <summary>
+    /// Temporary variables for Tarjan algorithm.
+    /// </summary>
     protected int[] _low;
+    /// <summary>
+    /// Count the number of strong connected components.
+    /// </summary>
     protected int _countStrongConnectedComponents;
+    /// <summary>
+    /// Trace vertices in the same strong connected components.
+    /// </summary>
     protected Stack<int> _traceStrongConnectedComponents;
+    /// <summary>
+    /// List of strong connected components.
+    /// </summary>
     protected List<List<int>> _strongConnectedComponents;
-    public GraphStrongConnectedComponents(UndirectedGraph graph) : base(graph)
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="graph"></param>
+    public GraphStrongConnectedComponents(Graph graph) : base(graph)
     {
         _low = new int[graph.NumberOfVertices];
         _number = new int[graph.NumberOfVertices];
@@ -17,6 +42,10 @@ public abstract class GraphStrongConnectedComponents : GraphTraversal
         _traceStrongConnectedComponents = new Stack<int>();
         _strongConnectedComponents = new List<List<int>>();
     }
+    /// <summary>
+    /// Get all strong connected components.
+    /// </summary>
+    /// <returns></returns>
     public List<List<int>> GetStrongConnectedComponents()
     {
         if (_strongConnectedComponents.Count == 0)
@@ -33,8 +62,15 @@ public abstract class GraphStrongConnectedComponents : GraphTraversal
     }
 }
 
+/// <summary>
+/// Strong connected components for directed graph with DFS.
+/// </summary>
 public class GraphStrongConnectedComponentsDFS : GraphStrongConnectedComponents
 {
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="graph"></param>
     public GraphStrongConnectedComponentsDFS(UndirectedGraph graph) : base(graph)
     {
     }
