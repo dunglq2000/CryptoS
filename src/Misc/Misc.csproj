@@ -7,10 +7,18 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
 
-    <PackageId>CryptoS.Misc.Test</PackageId>
+    <PackageId>CryptoS.Misc</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://dunglq2000.github.io/CryptoS/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dunglq2000/CryptoS</RepositoryUrl>
     <Version>1.0.0</Version>
-    <Authors>Quoc-Dung Le</Authors>
+    <Authors>Lê Quốc Dũng</Authors>
     <Company></Company>
   </PropertyGroup>
+
+  <ItemGroup>
+      <None Include="README.md" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>
