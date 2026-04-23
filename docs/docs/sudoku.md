@@ -1,11 +1,11 @@
 # Sudoku
 
-Giải Sudoku trên bảng 9x9 tiêu chuẩn.
+Solve standard 9x9 Sudoku's table.
 
 Cách dùng:
 
 ```cs
-using Sudoku;
+using CryptoS.Misc.Sudoku;
 
 SudokuMatrix sudokuMatrix = new SudokuMatrix([
     2, 9, 5, 7, 0, 0, 8, 6, 0,
@@ -28,7 +28,7 @@ Console.WriteLine("Output sudoku:");
 Console.WriteLine(sudokuMatrix);
 ```
 
-Lưu ý:
+Note:
 
-1. Các ô trống được điền bởi số $0$.
-2. Sau khi gọi lệnh `Solve`, ma trận sẽ được cập nhật thành kết quả. Do đó mỗi bảng ô vuông chỉ được gọi `Solve` một lần.
+1. Empty cells are filled with $0$.
+2. After calling `Solve`, matrix will be filled with the final result. Therefore any instance of `Sudoku` class should call `Solve` only once.

@@ -1,3 +1,3 @@
-# CryptoS
+# Introduction
 
-Project for education and learning basis concepts of cryptography and mathematics.
+CryptoS is a project for education and learning basis concepts of cryptography and mathematics.
